@@ -67,7 +67,7 @@ export default function App() {
     if (routeIndex !== null && PROJECTS[routeIndex]) {
       document.title = `${PROJECTS[routeIndex].title} — Azambuja`;
     } else {
-      document.title = 'Stack Portfolio — Interactive Project Deck';
+      document.title = 'Ricardo Azambuja | Creative Art Director';
     }
   }, []);
 
@@ -83,7 +83,7 @@ export default function App() {
       } else {
         setIsProjectPageOpen(false);
         setIsProjectInfoOpen(false);
-        document.title = 'Stack Portfolio — Interactive Project Deck';
+        document.title = 'Ricardo Azambuja | Creative Art Director';
       }
     };
 
@@ -232,7 +232,7 @@ export default function App() {
     if (window.location.pathname !== '/' && window.location.pathname !== '') {
       window.history.pushState({}, '', '/');
     }
-    document.title = 'Stack Portfolio — Interactive Project Deck';
+    document.title = 'Ricardo Azambuja | Creative Art Director';
   }, []);
 
   // Navigation handlers inside ProjectPage view
