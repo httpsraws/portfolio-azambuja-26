@@ -1,0 +1,6 @@
+{
+  "name": "Stack Portfolio",
+  "description": "Interactive 3D stacked deck portfolio with smooth vertical scroll transitions, parallax, and dark mode.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
