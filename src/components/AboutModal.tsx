@@ -28,6 +28,15 @@ export const AboutModal: React.FC<AboutModalProps> = ({
   isOutsideHome = false,
 }) => {
   const [photoSrc, setPhotoSrc] = useState('/assets/ricardo-photo.webp');
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const rotatingPhrases = language === 'pt' ? ['identidades visuais', 'campanhas criativas', 'design systems'] : ['visual identities', 'creative campaigns', 'design systems'];
+
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setPhraseIndex((index) => (index + 1) % rotatingPhrases.length), 3200);
+    return () => window.clearInterval(timer);
+  }, [rotatingPhrases.length]);
+
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Close when user clicks anywhere outside the About panel (on any free/empty area of the site)
@@ -122,21 +131,29 @@ export const AboutModal: React.FC<AboutModalProps> = ({
             <div className="space-y-4 text-[12px] sm:text-[12.5px] md:text-[13px] leading-[1.7] font-normal text-black/85 dark:text-white/85 tracking-[-0.01em]">
               <>
                 <p>
-                  <strong className="font-bold text-black dark:text-white">RICARDO AZAMBUJA</strong><br />
-                  {language === 'pt' ? 'Designer Gráfico & Diretor de Arte' : 'Graphic Designer & Art Director'}
+                  <strong className="font-bold capitalize text-black dark:text-white">Ricardo Azambuja</strong><br />
+                  <span className="text-black/60 dark:text-white/60">{language === 'pt' ? 'Designer Gráfico & Diretor de Arte' : 'Graphic Designer & Art Director'}</span>
                 </p>
-                <p><strong className="font-bold text-black dark:text-white">{language === 'pt' ? 'Crio identidades visuais, campanhas criativas e sistemas de design.' : 'I build visual identities, creative campaigns and design systems.'}</strong></p>
-                <p>
-                  <strong className="font-bold text-black dark:text-white">{language === 'pt' ? 'MAIS DE 8 ANOS' : '8+ YEARS'}</strong><br />
-                  {language === 'pt' ? 'Direção de arte · Branding · Design Ops · Design gráfico · Motion · IA criativa' : 'Art direction · Branding · Design Ops · Graphic Design · Motion · AI Creative'}
+                <p className="text-[21px] sm:text-[25px] md:text-[28px] leading-[1.12] tracking-[-0.045em] font-normal text-black/60 dark:text-white/60">
+                  {language === 'pt' ? 'Crio' : 'I build'}{' '}
+                  <span className="inline-grid overflow-hidden align-bottom text-black dark:text-white">
+                    <AnimatePresence initial={false}>
+                      <motion.span key={`${language}-${phraseIndex}`} initial={{ y: '-100%', opacity: 0 }} animate={{ y: '0%', opacity: 1 }} exit={{ y: '100%', opacity: 0 }} transition={{ duration: 0.55, ease: [0.42, 0, 0.58, 1] }} className="col-start-1 row-start-1">
+                        {rotatingPhrases[phraseIndex]}
+                      </motion.span>
+                    </AnimatePresence>
+                  </span>
+                </p>
+                <p className="!mt-0">
+                  <span className="about-marquee capitalize text-[14px] sm:text-[15px] text-black/60 dark:text-white/60" aria-label={language === 'pt' ? 'Direção de arte, Branding, Design Ops, Design gráfico, Motion, IA criativa' : 'Art direction, Branding, Design Ops, Graphic Design, Motion, AI Creative'}><span>{language === 'pt' ? 'Direção de arte · Branding · Design Ops · Design gráfico · Motion · IA criativa' : 'Art direction · Branding · Design Ops · Graphic Design · Motion · AI Creative'}&nbsp;&nbsp;·&nbsp;&nbsp;{language === 'pt' ? 'Direção de arte · Branding · Design Ops · Design gráfico · Motion · IA criativa' : 'Art direction · Branding · Design Ops · Graphic Design · Motion · AI Creative'}</span></span>
+                </p>
+                <p className="!mt-2">
+                  <strong className="font-bold text-[10px] sm:text-[11px] text-black dark:text-white">{language === 'pt' ? 'MARCAS COM AS QUAIS TRABALHEI' : "BRANDS I'VE WORKED WITH"}</strong><br />
+                  <span className="inline-flex flex-wrap gap-x-1">{['Bacio di Latte', 'Italac', 'USP', 'Estácio', 'Damásio', 'Ofner', 'Alife Nino', 'Smartfit', 'Som Livre', 'Flamengo', 'MEG', 'Autokraft', 'Grupo SOMOS', 'Yuzer'].map((brand, index, brands) => <span key={brand} className="whitespace-nowrap">{brand}{index < brands.length - 1 ? ' ·' : ''}</span>)}</span>
                 </p>
                 <p>
-                  <strong className="font-bold text-black dark:text-white">{language === 'pt' ? 'MARCAS COM AS QUAIS TRABALHEI' : "BRANDS I'VE WORKED WITH"}</strong><br />
-                  Bacio di Latte · Italac · USP · Estácio · Damásio · Ofner
-                </p>
-                <p>
-                  <strong className="font-bold text-black dark:text-white">{language === 'pt' ? 'FERRAMENTAS' : 'TOOLS'}</strong><br />
-                  Adobe Creative Suite · Figma · Blender · Seedance · Kling · Nano Banana · Claude
+                  <strong className="font-bold text-[10px] sm:text-[11px] text-black dark:text-white">{language === 'pt' ? 'PRINCIPAIS FERRAMENTAS' : 'TOOLS'}</strong><br />
+                  <span className="grid grid-cols-2 gap-x-2">{['Adobe Creative Suite', 'Figma', 'Blender', 'Seedance', 'Kling', 'Nano Banana', 'Claude'].map((tool, index) => <span key={tool} className={`flex items-center gap-1.5 ${index % 2 === 1 ? 'border-l border-black/15 dark:border-white/15 pl-2' : ''}`}><span className="text-[8px] leading-none">◆</span>{tool}</span>)}</span>
                 </p>
                 <p>
                   {language === 'pt'
@@ -151,7 +168,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({
 
             {/* Career Experience Section in All-Caps */}
             <div className="uppercase tracking-[0]">
-              <h3 className="font-bold text-[11px] sm:text-[12px] text-black dark:text-white mb-4">
+              <h3 className="font-bold text-[10px] sm:text-[11px] text-black dark:text-white mb-4">
                 {language === 'pt' ? 'EXPERIÊNCIA' : 'EXPERIENCE'}
               </h3>
 
@@ -175,7 +192,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({
             {/* Contact Information (Email & LinkedIn) */}
             <div>
               <h3 className="font-bold text-[11px] sm:text-[12px] uppercase text-black dark:text-white mb-3 tracking-[0]">
-                {language === 'pt' ? 'VAMOS CONVERSAR:' : 'TRY TO SCAM (OR HIRE) ME HERE:'}
+                {language === 'pt' ? 'VAMOS CONVERSAR:' : 'CONTACT ME HERE'}
               </h3>
 
               <div className="space-y-2 text-[11px] sm:text-[11.5px]">

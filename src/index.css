@@ -66,3 +66,13 @@
   width: 100% !important;
   height: 100% !important;
 }
+
+.about-marquee {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.about-marquee > span { display: inline-block; min-width: max-content; animation: about-marquee-scroll 18s linear infinite; }
+@keyframes about-marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
