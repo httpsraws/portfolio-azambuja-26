@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'motion/react';
-import { Info, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Info, X, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Project, Language } from '../types';
 import { ProjectInfoPanel } from './ProjectInfoPanel';
 
@@ -306,7 +306,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
   return (
     <div className="relative min-h-screen w-full bg-[#f6f6f7] dark:bg-[#0c0c0e] text-black dark:text-white transition-colors duration-500 overflow-x-hidden">
       {/* Top Right Corner: Floating Info Toggle Button (No border, no drop shadow) */}
-      <div className="fixed top-2.5 sm:top-4 right-3 sm:right-6 z-50 pointer-events-auto">
+      <div className="fixed top-[58px] sm:top-4 right-3 sm:right-6 z-50 pointer-events-auto">
         <button
           type="button"
           onClick={onToggleInfo}
@@ -321,7 +321,9 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
             : (language === 'pt' ? 'Alternar informações e créditos' : 'Toggle info & credits')}
           aria-expanded={isInfoOpen}
         >
-          <Info className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2]" />
+          {isInfoOpen
+            ? <X className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2]" />
+            : <Info className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2]" />}
           <motion.span
             style={{
               opacity: isInfoOpen ? 1 : descriptionOpacity,
@@ -330,7 +332,9 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
             }}
             className="text-[11px] sm:text-xs font-bold tracking-tight whitespace-nowrap overflow-hidden uppercase text-black/65 dark:text-white/65 group-hover:text-black dark:group-hover:text-white"
           >
-            {isInfoOpen ? 'FECHAR' : 'DESCRIÇÃO DO PROJETO'}
+            {isInfoOpen
+              ? (language === 'pt' ? 'FECHAR' : 'CLOSE')
+              : (language === 'pt' ? 'DESCRIÇÃO DO PROJETO' : 'PROJECT INFO')}
           </motion.span>
         </button>
       </div>

@@ -512,8 +512,8 @@ export const PROJECTS: Project[] = [
     coverImage: '/covers/08_Capa_CocaCola.png',
     summary: 'Projeto pessoal explorando subculturas alternativas e a perenidade do ícone Coca-Cola.',
     summaryEn: 'Personal project exploring alternative subcultures and the enduring icon of Coca-Cola.',
-    description: 'Projeto autoral que une a atemporalidade da Coca-Cola com a estética rebelde, nostálgica e autêntica das subculturas dos anos 2000. "It\'s not a phase, mom" mergulha na relação visceral entre a identidade juvenil e as paixões que resistem ao teste do tempo, ressignificando o visual icônico da marca através de tipografia gótica, pins metálicos e atitude punk rock.',
-    descriptionEn: 'Personal project blending the timelessness of Coca-Cola with the rebellious, nostalgic, and authentic aesthetic of 2000s subcultures. "It\'s not a phase, mom" delves into the visceral connection between youthful identity and passions that stand the test of time, reinterpreting the brand\'s iconic visual language through gothic typography, enamel pins, and punk rock attitude.',
+    description: 'Projeto autoral que une a atemporalidade da Coca-Cola com a estética rebelde, nostálgica e autêntica da cultura emo dos anos 2000. "It\'s not a phase, mom" mergulha na relação visceral entre a identidade juvenil e as paixões que resistem ao teste do tempo, ressignificando o visual icônico da marca através de tipografia gótica, pins metálicos e atitude emo rock.',
+    descriptionEn: 'Personal project blending the timelessness of Coca-Cola with the rebellious, nostalgic, and authentic aesthetic of 2000s emo culture. "It\'s not a phase, mom" delves into the visceral connection between youthful identity and passions that stand the test of time, reinterpreting the brand\'s iconic visual language through gothic typography, enamel pins, and emo rock attitude.',
     tags: ['Print', 'Projeto Pessoal', 'Coca-Cola', 'Poster', 'Subcultura'],
     credits: [
       { role: 'Cliente', roleEn: 'Client', name: 'Coca-Cola' },

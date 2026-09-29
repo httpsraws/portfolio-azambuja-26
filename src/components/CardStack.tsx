@@ -240,7 +240,7 @@ export const CardStack: React.FC<CardStackProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-full flex items-center justify-center overflow-hidden perspective-[1400px]"
+      className="relative w-full h-full flex items-center justify-center overflow-hidden perspective-[1400px] -translate-y-10 sm:translate-y-0"
     >
       <motion.div
         animate={{
