@@ -7,7 +7,7 @@ export const PROJECTS: Project[] = [
     subtitle: 'Campanha de lançamento Bacio di Latte',
     subtitleEn: 'Bacio di Latte Zero Launch Campaign',
     category: 'Filme Publicitário',
-    categoryEn: 'Commercial Film',
+    categoryEn: 'Film',
     year: '2026',
     client: 'Bacio di Latte',
     agency: 'Duuna',
@@ -33,66 +33,31 @@ export const PROJECTS: Project[] = [
       { role: 'Redação', roleEn: 'Copywriting', name: 'Luiz Otávio Medeiros' },
       { role: 'Direção de Arte', roleEn: 'Art Direction', name: 'Ricardo Azambuja, Vinicius Eloi, Vinicius Meireles' },
       { role: 'Ano', roleEn: 'Year', name: '2026' },
-      { role: 'Categoria', roleEn: 'Category', name: 'Filme Publicitário', nameEn: 'Commercial Film' }
+      { role: 'Categoria', roleEn: 'Category', name: 'Filme Publicitário', nameEn: 'Film' }
     ],
     images: [
       {
         id: 'bacio-01',
         url: '/projects/01 - Bacio Zero/01_Bacio.MP4',
-        caption: '01 / 08 — Bacio Zero: Pureza artesanal e indulgência italiana sem adição de açúcares',
-        captionEn: '01 / 08 — Bacio Zero: Artisanal purity and Italian indulgence without added sugars',
+        caption: '01 / 03 — Bacio Zero: Pureza artesanal e indulgência italiana sem adição de açúcares',
+        captionEn: '01 / 03 — Bacio Zero: Artisanal purity and Italian indulgence without added sugars',
         alt: 'Bacio di Latte Gelato Zero commercial video',
         embedHTML: '<iframe src="https://player.vimeo.com/video/1213313203?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" width="1080" height="1920" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" title="Bacio Zero | Bacio di Latte"></iframe>'
       },
       {
         id: 'bacio-02',
         url: '/projects/01 - Bacio Zero/02_Bacio.jpg',
-        caption: '02 / 08 — Textura aveludada do gelato em cena macro cinematográfica',
-        captionEn: '02 / 08 — Velvety gelato texture in macro cinematic capture',
+        caption: '02 / 03 — Textura aveludada do gelato em cena macro cinematográfica',
+        captionEn: '02 / 03 — Velvety gelato texture in macro cinematic capture',
         alt: 'Velvety gelato texture macro'
       },
       {
         id: 'bacio-03',
         url: '/projects/01 - Bacio Zero/03_Bacio.jpg',
-        caption: '03 / 08 — Fotografia de produto com iluminação e estética clean',
-        captionEn: '03 / 08 — Product photography with soft lighting and clean aesthetic',
+        caption: '03 / 03 — Fotografia de produto com iluminação e estética clean',
+        captionEn: '03 / 03 — Product photography with soft lighting and clean aesthetic',
         alt: 'Gelato product still life'
       },
-      {
-        id: 'bacio-04',
-        url: '/projects/01 - Bacio Zero/04_Bacio.mp4',
-        caption: '04 / 08 — Frame cinematográfico: movimento fluído do gelato',
-        captionEn: '04 / 08 — Cinematic frame: Fluid motion of gelato',
-        alt: 'Gelato motion shot'
-      },
-      {
-        id: 'bacio-05',
-        url: '/projects/01 - Bacio Zero/05_Bacio.mp4',
-        caption: '05 / 08 — Preparação artesanal em close-up',
-        captionEn: '05 / 08 — Artisanal preparation in close-up',
-        alt: 'Gelato preparation process'
-      },
-      {
-        id: 'bacio-06',
-        url: '/projects/01 - Bacio Zero/06_Bacio.mp4',
-        caption: '06 / 08 — Experiência sensorial com luz solar difusa',
-        captionEn: '06 / 08 — Sensory experience with diffused sunlight',
-        alt: 'Gelato sensory experience'
-      },
-      {
-        id: 'bacio-07',
-        url: '/projects/01 - Bacio Zero/07_Bacio.mp4',
-        caption: '07 / 08 — Identidade visual dos sabores em movimento',
-        captionEn: '07 / 08 — Flavor visual identity in motion',
-        alt: 'Flavor identity animation'
-      },
-      {
-        id: 'bacio-08',
-        url: '/projects/01 - Bacio Zero/08_Bacio.mp4',
-        caption: '08 / 08 — Celebração final: O gelato Zero em toda sua indulgência',
-        captionEn: '08 / 08 — Final celebration: Zero gelato in full indulgent glory',
-        alt: 'Final celebration shot'
-      }
     ]
   },
   {
@@ -101,7 +66,7 @@ export const PROJECTS: Project[] = [
     subtitle: 'Ambev × Botecos Boa Praça & Tatu Bola',
     subtitleEn: 'Ambev × Boa Praça & Tatu Bola Bars',
     category: 'Filme Publicitário',
-    categoryEn: 'Commercial Film',
+    categoryEn: 'Film',
     year: '2026',
     client: 'Alife Nino',
     agency: 'Duuna',
@@ -127,7 +92,7 @@ export const PROJECTS: Project[] = [
       { role: 'Redação', roleEn: 'Copywriting', name: 'Luiz Otávio Medeiros' },
       { role: 'Direção de Arte', roleEn: 'Art Direction', name: 'Ricardo Azambuja' },
       { role: 'Ano', roleEn: 'Year', name: '2026' },
-      { role: 'Categoria', roleEn: 'Category', name: 'Filme Publicitário', nameEn: 'Commercial Film' }
+      { role: 'Categoria', roleEn: 'Category', name: 'Filme Publicitário', nameEn: 'Film' }
     ],
     images: [
       {

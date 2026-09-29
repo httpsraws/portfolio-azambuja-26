@@ -59,7 +59,7 @@ export const Footer: React.FC<FooterProps> = ({
       const clockRect = clockEl.getBoundingClientRect();
 
       if (cardRect.bottom > 0 && clockRect.top > 0) {
-        // Exact vertical midpoint between card bottom and clock top
+        // Keep the arrows anchored between the fixed card position and the clock
         setMidpointY((cardRect.bottom + clockRect.top) / 2);
       }
     };
@@ -67,6 +67,7 @@ export const Footer: React.FC<FooterProps> = ({
     computeMidpoint();
     const rafId = requestAnimationFrame(computeMidpoint);
     const timeoutId = setTimeout(computeMidpoint, 120);
+    const settleTimeoutId = setTimeout(computeMidpoint, 1050);
 
     window.addEventListener('resize', computeMidpoint);
     window.addEventListener('orientationchange', computeMidpoint);
@@ -82,6 +83,7 @@ export const Footer: React.FC<FooterProps> = ({
     return () => {
       cancelAnimationFrame(rafId);
       clearTimeout(timeoutId);
+      clearTimeout(settleTimeoutId);
       window.removeEventListener('resize', computeMidpoint);
       window.removeEventListener('orientationchange', computeMidpoint);
       if (ro) ro.disconnect();

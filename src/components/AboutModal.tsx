@@ -120,31 +120,30 @@ export const AboutModal: React.FC<AboutModalProps> = ({
 
             {/* Main Biography Section */}
             <div className="space-y-4 text-[12px] sm:text-[12.5px] md:text-[13px] leading-[1.7] font-normal text-black/85 dark:text-white/85 tracking-[-0.01em]">
-              {language === 'pt' ? (
-                <>
-                  <p>
-                    Ricardo Azambuja é designer gráfico e diretor de arte com sólida formação em motion design, modelagem 3D e animação. Atualmente, possui as 16 insígnias das regiões de Kanto e Johto e foi campeão da Liga Pokémon.
-                  </p>
-                  <p>
-                    Com oito anos de experiência em direção de arte, branding e comunicação visual, especializou-se em Advertising &amp; Branding na Miami Ad School e está concluindo graduação em Desenho Industrial (Design de Produto) na Universidade Federal Fluminense. Ao longo de sua trajetória, conduziu projetos criativos para grandes marcas como Bacio di Latte, Italac, USP (Universidade de São Paulo), Estácio, Damásio e outras. Sua atuação abrange criação de key visuals, motion design, UI/UX design e a integração de inteligência artificial no processo criativo.
-                  </p>
-                  <p>
-                    Atualmente atua como Diretor de Arte na Duuna, desenvolvendo key visuals e conceitos criativos para campanhas publicitárias, filmes e ativações de marca. Anteriormente, como Diretor de Arte na Quest Edu, liderou grandes iniciativas de branding, rebranding e design system para instituições como USP, Damásio e Estácio, impulsionando resultados recordes de vendas e crescimento de receita. Desde 2018, entrega soluções de design, estratégia de marca e UI/UX para uma base diversificada de clientes em educação, esportes, tecnologia e entretenimento.
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p>
-                    Ricardo Azambuja is a graphic designer &amp; art director with strong background in motion design, 3D modeling &amp; animation. Actually, he owns the 16 badges from Kanto and Johto regions and won the Pokémon League.
-                  </p>
-                  <p>
-                    With eight years of experience in art direction, branding and visual communication. He specialized in Advertising &amp; Branding at Miami Ad School and is completing a degree in Product Design at Universidade Federal Fluminense. Over the course of his career, he has led creative work for major brands including Bacio di Latte, Italac, USP (Universidade de São Paulo), Estácio, Damásio and others. His expertise spans key visual creation, motion design, UI/UX design, and, more recently, the integration of artificial intelligence into the creative process.
-                  </p>
-                  <p>
-                    Currently working as an Art Director at Duuna, Ricardo develops key visuals and creative ideas for advertising campaigns, films and brand activations. Prior to this, as Art Director at Quest Edu, he led major branding &amp; rebranding and design system initiatives for institutions like USP, Damásio and Estácio, contributing to record-breaking sales results and significant revenue growth. Throughout his career since 2018, he has delivered brand design &amp; strategy and UI/UX solutions for a diverse client base, merging strategic thinking with strong visual craft across education, sports, tech and entertainment sectors.
-                  </p>
-                </>
-              )}
+              <>
+                <p>
+                  <strong className="font-bold text-black dark:text-white">RICARDO AZAMBUJA</strong><br />
+                  {language === 'pt' ? 'Designer Gráfico & Diretor de Arte' : 'Graphic Designer & Art Director'}
+                </p>
+                <p><strong className="font-bold text-black dark:text-white">{language === 'pt' ? 'Crio identidades visuais, campanhas criativas e sistemas de design.' : 'I build visual identities, creative campaigns and design systems.'}</strong></p>
+                <p>
+                  <strong className="font-bold text-black dark:text-white">{language === 'pt' ? 'MAIS DE 8 ANOS' : '8+ YEARS'}</strong><br />
+                  {language === 'pt' ? 'Direção de arte · Branding · Design Ops · Design gráfico · Motion · IA criativa' : 'Art direction · Branding · Design Ops · Graphic Design · Motion · AI Creative'}
+                </p>
+                <p>
+                  <strong className="font-bold text-black dark:text-white">{language === 'pt' ? 'MARCAS COM AS QUAIS TRABALHEI' : "BRANDS I'VE WORKED WITH"}</strong><br />
+                  Bacio di Latte · Italac · USP · Estácio · Damásio · Ofner
+                </p>
+                <p>
+                  <strong className="font-bold text-black dark:text-white">{language === 'pt' ? 'FERRAMENTAS' : 'TOOLS'}</strong><br />
+                  Adobe Creative Suite · Figma · Blender · Seedance · Kling · Nano Banana · Claude
+                </p>
+                <p>
+                  {language === 'pt'
+                    ? 'E sim, também tenho todas as 16 insígnias de Kanto e Johto e venci a Liga Pokémon.'
+                    : 'And yes, I also have all 16 Kanto & Johto badges and won the Pokémon League.'}
+                </p>
+              </>
             </div>
 
             {/* Minimalist Divider */}

@@ -28,9 +28,11 @@ interface MediaItemProps {
   };
   index: number;
   projectTitle: string;
+  standardWidth?: number;
+  onStandardWidth?: (width: number) => void;
 }
 
-const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle }) => {
+const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle, standardWidth, onStandardWidth }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -40,6 +42,14 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle }) => 
 
   // Detect if this is an iframe embed
   const isIframe = image.embedHTML && image.embedHTML.includes('iframe');
+  const iframeAspectRatio = (() => {
+    const dimensions = image.embedHTML?.match(/<iframe[^>]*width=["'](\d+)["'][^>]*height=["'](\d+)["']/i);
+    if (dimensions) return Number(dimensions[1]) / Number(dimensions[2]);
+    const padding = image.embedHTML?.match(/padding(?:-top)?\s*:\s*([\d.]+)%/i);
+    return padding ? 100 / Number(padding[1]) : 16 / 9;
+  })();
+  const isPortraitEmbed = Boolean(isIframe && iframeAspectRatio < 0.8);
+  const isPortraitMedia = aspectRatio === 'portrait';
 
   // Detect media type and generate candidate paths
   const srcCandidates = useMemo(() => {
@@ -81,6 +91,12 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle }) => 
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const img = e.currentTarget;
     const ratio = img.naturalWidth / img.naturalHeight;
+    if (onStandardWidth) {
+      const availableWidth = containerRef.current?.clientWidth ?? img.naturalWidth;
+      const availableHeight = Math.max(0, window.innerHeight - 180);
+      const scale = Math.min(1, availableWidth / img.naturalWidth, availableHeight / img.naturalHeight);
+      onStandardWidth(img.naturalWidth * scale);
+    }
     
     if (ratio > 1.3) {
       setAspectRatio('landscape');
@@ -147,13 +163,6 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle }) => 
       : [0.1, 1, 1, 0]
   );
 
-  // Size classes based on aspect ratio
-  const sizeClasses = {
-    landscape: 'w-full',
-    portrait: 'max-w-md',
-    square: 'max-w-2xl'
-  };
-
   return (
     <div
       ref={containerRef}
@@ -161,14 +170,16 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle }) => 
     >
       <motion.div
         style={{
-          scale,
-          opacity,
+          scale: index === 0 ? 1 : scale,
+          opacity: index === 0 ? 1 : opacity,
+          width: standardWidth ? `${standardWidth}px` : undefined,
+          maxWidth: standardWidth ? '100%' : undefined,
           transformOrigin: 'center center',
         }}
-        className={`will-change-transform transform-gpu ${sizeClasses[aspectRatio]}`}
+        className={`will-change-transform transform-gpu ${isPortraitMedia || isPortraitEmbed ? 'w-auto max-w-full' : 'w-full'}`}
       >
         {/* Adaptive container that preserves aspect ratio */}
-        <div className="relative w-full rounded-xl sm:rounded-2xl overflow-hidden bg-neutral-200/70 dark:bg-neutral-900/80">
+        <div className={`relative rounded-xl sm:rounded-2xl overflow-hidden bg-neutral-200/70 dark:bg-neutral-900/80 ${isPortraitMedia || isPortraitEmbed ? 'w-auto max-w-full' : 'w-full'}`}>
           {/* Skeleton loading animation */}
           {!isLoaded && !hasError && (
             <div className="absolute inset-0 bg-gradient-to-r from-black/5 via-black/10 to-black/5 dark:from-white/5 dark:via-white/10 dark:to-white/5 animate-pulse flex items-center justify-center">
@@ -189,9 +200,14 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle }) => 
               </span>
             </div>
           ) : mediaType === 'iframe' ? (
-            <div className="w-full bg-black flex items-center justify-center">
+            <div className={`bg-black flex items-center justify-center ${isPortraitEmbed ? 'w-auto max-w-full' : 'w-full'}`}>
               <div
-                className="w-full max-w-4xl aspect-video"
+                className={`vimeo-embed relative overflow-hidden ${isPortraitEmbed ? '' : 'w-full'}`}
+                style={standardWidth
+                  ? { aspectRatio: String(iframeAspectRatio), width: '100%' }
+                  : isPortraitEmbed
+                  ? { aspectRatio: String(iframeAspectRatio), height: 'min(70svh, calc(100svh - 180px))', width: `min(100%, ${iframeAspectRatio * 70}svh)` }
+                  : { aspectRatio: String(iframeAspectRatio) }}
                 dangerouslySetInnerHTML={{ __html: image.embedHTML || '' }}
               />
             </div>
@@ -205,7 +221,7 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle }) => 
               playsInline
               onLoadedMetadata={handleVideoMetadata}
               onError={handleError}
-              className="w-full h-auto select-none opacity-100"
+              className={`select-none opacity-100 ${isPortraitMedia && !standardWidth ? 'w-auto h-auto max-w-full max-h-[calc(100svh-180px)]' : 'w-full h-auto'}`}
             />
           ) : (
             <img
@@ -215,7 +231,7 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle }) => 
               loading={index < 2 ? 'eager' : 'lazy'}
               onLoad={handleImageLoad}
               onError={handleError}
-              className="w-full h-auto select-none opacity-100"
+              className={`select-none opacity-100 ${isPortraitMedia && !standardWidth ? 'w-auto h-auto max-w-full max-h-[calc(100svh-180px)]' : 'w-full h-auto'}`}
             />
           )}
         </div>
@@ -240,6 +256,11 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1200
   );
+  const [bacioReferenceWidth, setBacioReferenceWidth] = useState<number>();
+  const { scrollY } = useScroll();
+  const descriptionOpacity = useTransform(scrollY, [0, 180], [1, 0]);
+  const descriptionMaxWidth = useTransform(scrollY, [0, 180], ['180px', '0px']);
+  const descriptionMargin = useTransform(scrollY, [0, 180], ['8px', '0px']);
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -278,6 +299,10 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
     document.documentElement.scrollTop = 0;
   }, [project.id]);
 
+  useEffect(() => {
+    setBacioReferenceWidth(undefined);
+  }, [project.id]);
+
   return (
     <div className="relative min-h-screen w-full bg-[#f6f6f7] dark:bg-[#0c0c0e] text-black dark:text-white transition-colors duration-500 overflow-x-hidden">
       {/* Top Right Corner: Floating Info Toggle Button (No border, no drop shadow) */}
@@ -285,19 +310,28 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
         <button
           type="button"
           onClick={onToggleInfo}
-          className={`h-[44px] sm:h-[48px] px-3.5 sm:px-4 rounded-lg sm:rounded-xl flex items-center gap-2 transition-all duration-200 cursor-pointer select-none active:scale-95 border-0 shadow-none ${
+          className={`group h-[44px] sm:h-[48px] px-3 sm:px-3.5 rounded-lg sm:rounded-xl flex items-center gap-0 transition-all duration-200 cursor-pointer select-none active:scale-95 border-0 shadow-none ${
             isInfoOpen
-              ? 'bg-black text-white dark:bg-white dark:text-black'
-              : 'bg-white/80 dark:bg-[#141416]/80 backdrop-blur-2xl text-black dark:text-white hover:bg-white/95 dark:hover:bg-[#1c1c20]'
+              ? 'bg-white/50 text-black dark:bg-[#141416]/65 dark:text-white hover:bg-black/5 dark:hover:bg-white/10 backdrop-blur-2xl backdrop-saturate-150'
+              : 'bg-white/80 dark:bg-[#141416]/80 backdrop-blur-2xl text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/10'
           }`}
           title={language === 'pt' ? 'Informações e créditos' : 'Info & Credits'}
-          aria-label={language === 'pt' ? 'Alternar informações e créditos' : 'Toggle info & credits'}
+          aria-label={isInfoOpen
+            ? (language === 'pt' ? 'Fechar informações e créditos' : 'Close info & credits')
+            : (language === 'pt' ? 'Alternar informações e créditos' : 'Toggle info & credits')}
           aria-expanded={isInfoOpen}
         >
           <Info className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2]" />
-          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-tight hidden xs:inline">
-            INFO
-          </span>
+          <motion.span
+            style={{
+              opacity: isInfoOpen ? 1 : descriptionOpacity,
+              maxWidth: isInfoOpen ? '180px' : descriptionMaxWidth,
+              marginLeft: isInfoOpen ? '8px' : descriptionMargin,
+            }}
+            className="text-[11px] sm:text-xs font-bold tracking-tight whitespace-nowrap overflow-hidden uppercase text-black/65 dark:text-white/65 group-hover:text-black dark:group-hover:text-white"
+          >
+            {isInfoOpen ? 'FECHAR' : 'DESCRIÇÃO DO PROJETO'}
+          </motion.span>
         </button>
       </div>
 
@@ -319,21 +353,42 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
           duration: 0.55,
           ease: [0.32, 0.72, 0, 1],
         }}
-        className="max-w-[1440px] w-full mx-auto px-4 sm:px-8 lg:px-12 pt-16 sm:pt-20 pb-24 sm:pb-32 will-change-transform"
+        className={`max-w-[1440px] w-full mx-auto px-4 sm:px-8 lg:px-12 ${isPanelOpen ? 'sm:pl-20 md:pl-24 lg:pl-32' : ''} pt-16 sm:pt-20 pb-24 sm:pb-32 will-change-transform`}
       >
         <section
           aria-label={language === 'pt' ? 'Galeria de imagens' : 'Image gallery'}
           className="space-y-6 sm:space-y-8 md:space-y-10"
         >
           {project.images && project.images.length > 0 ? (
-            project.images.map((img, idx) => (
+            project.images.map((img, idx) => {
+              if (project.id === 'playoffs-2k23' && (idx === 3 || idx === 4)) return null;
+              if (project.id === 'playoffs-2k23' && idx === 2) {
+                return (
+                  <div key="playoffs-grid" className="grid w-full grid-cols-3 gap-2 sm:gap-3 items-start">
+                    {project.images.slice(2, 5).map((gridImage, gridIndex) => (
+                      <MediaItem
+                        key={gridImage.id || `${project.id}-${gridIndex + 2}`}
+                        image={gridImage}
+                        index={gridIndex + 2}
+                        projectTitle={project.title}
+                      />
+                    ))}
+                  </div>
+                );
+              }
+              return (
               <MediaItem
                 key={img.id || `${project.id}-${idx}`}
                 image={img}
                 index={idx}
                 projectTitle={project.title}
+                standardWidth={project.id === 'bacio-zero' && bacioReferenceWidth && (idx === 0 || idx === 2)
+                  ? bacioReferenceWidth * (idx === 0 ? 1.01 : 1)
+                  : undefined}
+                onStandardWidth={project.id === 'bacio-zero' && idx === 1 ? setBacioReferenceWidth : undefined}
               />
-            ))
+              );
+            })
           ) : (
             <div className="w-full aspect-[16/9] rounded-2xl bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center">
               <span className="text-sm opacity-60">Carregando imagens...</span>

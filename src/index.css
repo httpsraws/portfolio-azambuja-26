@@ -50,15 +50,19 @@
   }
 }
 
-/* Embed player styling for Vimeo and YouTube */
-[dangerouslySetInnerHTML] iframe,
-.aspect-video iframe {
+/* Responsive embedded players */
+.vimeo-embed iframe {
+  position: absolute !important;
+  inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
+  pointer-events: auto !important;
 }
 
-[dangerouslySetInnerHTML] > div,
-[dangerouslySetInnerHTML] > div > div {
+.vimeo-embed > div,
+.vimeo-embed > div > div {
+  position: static !important;
+  padding: 0 !important;
   width: 100% !important;
   height: 100% !important;
 }

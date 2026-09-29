@@ -90,7 +90,7 @@ export const CardStack: React.FC<CardStackProps> = ({
   const tiltRotateX = useTransform(smoothMouseY, [0, 1], [12, -12]);
   const tiltRotateY = useTransform(smoothMouseX, [0, 1], [-14, 14]);
   const tiltTranslateX = useTransform(smoothMouseX, [0, 1], [-20, 20]);
-  const tiltTranslateY = useTransform(smoothMouseY, [0, 1], [-16, 16]);
+  const tiltTranslateY = useTransform(smoothMouseY, [0, 1], [4, 36]);
 
   // Track global mouse position for parallax
   useEffect(() => {
@@ -255,7 +255,7 @@ export const CardStack: React.FC<CardStackProps> = ({
         {/* Static Anchor for measuring resting card bottom without 3D tilt perturbation */}
         <div
           id="card-stack-anchor"
-          className="absolute w-full max-w-[94vw] sm:max-w-[740px] md:max-w-[820px] lg:max-w-[900px] xl:max-w-[1000px] aspect-[16/9] pointer-events-none opacity-0 select-none"
+          className="absolute translate-y-5 w-full max-w-[94vw] sm:max-w-[740px] md:max-w-[820px] lg:max-w-[900px] xl:max-w-[1000px] aspect-[16/9] pointer-events-none opacity-0 select-none"
           aria-hidden="true"
         />
 
@@ -383,9 +383,23 @@ export const CardStack: React.FC<CardStackProps> = ({
                   }}
                 >
                   <CardCover project={project} isFront={isFront} />
+                  {(isFront || isPassed) && (
+                    <div
+                      id={isFront ? 'active-project-title' : undefined}
+                      className="absolute left-0 right-0 top-full z-[70] pt-3 text-center pointer-events-none select-none"
+                    >
+                      <p className="text-sm sm:text-base font-semibold tracking-tight text-black dark:text-white">
+                        {project.title}
+                      </p>
+                      <p className="mt-0.5 text-[11px] sm:text-xs text-black/50 dark:text-white/50">
+                        {project.client}
+                      </p>
+                    </div>
+                  )}
                 </motion.div>
               );
             })}
+
           </div>
         </motion.div>
       </motion.div>
