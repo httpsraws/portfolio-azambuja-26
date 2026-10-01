@@ -28,7 +28,7 @@ export const ProjectInfoPanel: React.FC<ProjectInfoPanelProps> = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             onClick={onClose}
-            className="fixed inset-0 z-50 bg-black/20 dark:bg-black/40 backdrop-blur-[2px] sm:hidden"
+            className="fixed inset-0 z-50 bg-black/20 dark:bg-black/40 sm:hidden"
             aria-hidden="true"
           />
 
@@ -37,9 +37,9 @@ export const ProjectInfoPanel: React.FC<ProjectInfoPanelProps> = ({
             id="project-info-drawer"
             initial={{ x: 50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            exit={{ x: 50, opacity: 0 }}
+            exit={{ x: 20, opacity: 0, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] } }}
             transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
-            className="fixed right-3 sm:right-6 top-[112px] sm:top-[82px] z-50 w-[calc(100vw-24px)] sm:w-[360px] md:w-[400px] max-h-[calc(100vh-130px)] sm:max-h-[calc(100vh-100px)] overflow-y-auto overscroll-contain select-text p-5 sm:p-0 rounded-2xl sm:rounded-none bg-white/95 dark:bg-[#111113]/95 sm:bg-transparent sm:dark:bg-transparent backdrop-blur-xl sm:backdrop-blur-none shadow-2xl sm:shadow-none border border-black/5 dark:border-white/10 sm:border-0 [scrollbar-width:thin] [scrollbar-color:rgba(128,128,128,0.25)_transparent] space-y-6"
+            className="fixed right-3 sm:right-6 top-[112px] sm:top-[82px] z-50 w-[calc(100vw-24px)] sm:w-[360px] md:w-[400px] max-h-[calc(100vh-130px)] sm:max-h-[calc(100vh-100px)] overflow-y-auto overscroll-contain select-text p-5 sm:p-0 rounded-2xl sm:rounded-none bg-white/95 dark:bg-[#111113]/95 sm:bg-transparent sm:dark:bg-transparent shadow-2xl sm:shadow-none border border-black/5 dark:border-white/10 sm:border-0 [scrollbar-width:thin] [scrollbar-color:rgba(128,128,128,0.25)_transparent] space-y-6"
             aria-label={language === 'pt' ? 'Informações e créditos do projeto' : 'Project information and credits'}
           >
             {/* Header with Project Title: regular weight, capitalized, subtly larger, no bold, no all-caps */}

@@ -39,7 +39,6 @@ export const CardCover: React.FC<CardCoverProps> = ({ project }) => {
     <div
       className="relative w-full h-full overflow-hidden select-none rounded-[22px] flex flex-col items-center justify-center bg-neutral-200 dark:bg-neutral-900"
       style={{
-        backgroundColor: project.bgColor || undefined,
         color: project.textColor === 'light' ? '#ffffff' : '#0f172a',
       }}
     >

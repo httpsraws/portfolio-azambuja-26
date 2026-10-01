@@ -284,11 +284,29 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
   showInfoToggle = true,
   showProjectNavigation = true,
 }) => {
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  );
   const [bacioReferenceWidth, setBacioReferenceWidth] = useState<number>();
   const { scrollY } = useScroll();
   const descriptionOpacity = useTransform(scrollY, [0, 180], [1, 0]);
   const descriptionMaxWidth = useTransform(scrollY, [0, 180], ['180px', '0px']);
   const descriptionMargin = useTransform(scrollY, [0, 180], ['8px', '0px']);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isPanelOpen = isInfoOpen || isAboutOpen;
+  const shiftX = isPanelOpen
+    ? windowWidth < 640
+      ? 0
+      : windowWidth < 1024
+        ? -160
+        : -260
+    : 0;
 
   // Keyboard navigation between projects with Left/Right arrow keys
   useEffect(() => {
@@ -362,7 +380,9 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
 
       {/* Main Image Gallery Stream: 1 Image per line in 16:9, tight spacing, smooth scroll transitions */}
       <motion.main
-        className="max-w-[1440px] w-full mx-auto px-4 sm:px-8 lg:px-12 pt-16 sm:pt-20 pb-24 sm:pb-32"
+        animate={{ x: shiftX }}
+        transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
+        className={`max-w-[1440px] w-full mx-auto px-4 sm:px-8 lg:px-12 ${isPanelOpen ? 'sm:pl-20 md:pl-24 lg:pl-32' : ''} pt-16 sm:pt-20 pb-24 sm:pb-32 will-change-transform`}
       >
         <section
           aria-label={language === 'pt' ? 'Galeria de imagens' : 'Image gallery'}
@@ -415,7 +435,9 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
         className="fixed bottom-3.5 sm:bottom-6 left-0 right-0 z-40 px-3 sm:px-6 flex justify-center pointer-events-none"
       >
         <motion.nav
-          className={`${showProjectNavigation ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center justify-center gap-5 sm:gap-7 px-5 sm:px-6 h-[44px] sm:h-[48px] rounded-lg sm:rounded-xl bg-white/50 dark:bg-[#141416]/65 backdrop-blur-2xl backdrop-saturate-150 shadow-none select-none transition-all duration-300`}
+          animate={{ x: shiftX }}
+          transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
+          className={`${showProjectNavigation ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center justify-center gap-5 sm:gap-7 px-5 sm:px-6 h-[44px] sm:h-[48px] rounded-lg sm:rounded-xl bg-white/50 dark:bg-[#141416]/65 backdrop-blur-2xl backdrop-saturate-150 shadow-none select-none transition-colors duration-300`}
           aria-label={language === 'pt' ? 'Navegação entre projetos' : 'Project navigation'}
         >
           {onPrevProject && (

@@ -59,6 +59,10 @@
   pointer-events: auto !important;
 }
 
+.media-frame {
+  isolation: isolate;
+}
+
 .vimeo-embed > div,
 .vimeo-embed > div > div {
   position: static !important;

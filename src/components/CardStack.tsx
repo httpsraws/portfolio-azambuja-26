@@ -372,12 +372,6 @@ export const CardStack: React.FC<CardStackProps> = ({
                       onSelectProject(index, 1);
                     }
                   }}
-                  onAuxClick={(event) => {
-                    if (isFront && event.button === 1) {
-                      event.preventDefault();
-                      window.open(`/${getProjectSlug(index)}`, '_blank', 'noopener,noreferrer');
-                    }
-                  }}
                   className={`absolute inset-0 w-full h-full rounded-[22px] ring-1 ring-black/10 dark:ring-0 ${
                     isFront && !isResetting
                       ? 'cursor-pointer pointer-events-auto'
@@ -390,6 +384,29 @@ export const CardStack: React.FC<CardStackProps> = ({
                   }}
                 >
                   <CardCover project={project} isFront={isFront} />
+                  {(isFront || (isBehind && offset <= 4)) && !isResetting && (
+                    <a
+                      href={`/${getProjectSlug(index)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Open ${project.title} in a new tab`}
+                      className="absolute inset-0 z-[60] rounded-[22px]"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        const isModifiedClick = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+                        if (event.button === 0 && !isModifiedClick) {
+                          event.preventDefault();
+                          if (isFront) {
+                            playClickSound(soundEnabled);
+                            onOpenDetail();
+                          } else {
+                            playSwooshSound(soundEnabled);
+                            onSelectProject(index, 1);
+                          }
+                        }
+                      }}
+                    />
+                  )}
                   {(isFront || isPassed) && (
                     <div
                       id={isFront ? 'active-project-title' : undefined}
