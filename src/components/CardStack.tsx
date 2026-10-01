@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { Project } from '../types';
 import { CardCover } from './CardCover';
 import { playClickSound, playSwooshSound } from '../utils/sound';
+import { getProjectSlug } from '../utils/routes';
 
 interface CardStackProps {
   projects: Project[];
@@ -369,6 +370,12 @@ export const CardStack: React.FC<CardStackProps> = ({
                     } else if (isBehind && offset <= 4) {
                       playSwooshSound(soundEnabled);
                       onSelectProject(index, 1);
+                    }
+                  }}
+                  onAuxClick={(event) => {
+                    if (isFront && event.button === 1) {
+                      event.preventDefault();
+                      window.open(`/${getProjectSlug(index)}`, '_blank', 'noopener,noreferrer');
                     }
                   }}
                   className={`absolute inset-0 w-full h-full rounded-[22px] ring-1 ring-black/10 dark:ring-0 ${

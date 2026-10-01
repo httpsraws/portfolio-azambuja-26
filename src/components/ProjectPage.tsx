@@ -16,6 +16,8 @@ interface ProjectPageProps {
   onToggleInfo: () => void;
   isAboutOpen?: boolean;
   projectIndex?: number;
+  showInfoToggle?: boolean;
+  showProjectNavigation?: boolean;
 }
 
 interface MediaItemProps {
@@ -37,11 +39,13 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle, stand
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [candidateIdx, setCandidateIdx] = useState(0);
-  const [mediaType, setMediaType] = useState<'video' | 'image' | 'iframe'>('image');
   const [aspectRatio, setAspectRatio] = useState<'landscape' | 'portrait' | 'square'>('landscape');
 
   // Detect if this is an iframe embed
   const isIframe = image.embedHTML && image.embedHTML.includes('iframe');
+  const mediaType: 'video' | 'image' | 'iframe' = isIframe
+    ? 'iframe'
+    : image.url.toLowerCase().endsWith('.mp4') ? 'video' : 'image';
   const iframeAspectRatio = (() => {
     const dimensions = image.embedHTML?.match(/<iframe[^>]*width=["'](\d+)["'][^>]*height=["'](\d+)["']/i);
     if (dimensions) return Number(dimensions[1]) / Number(dimensions[2]);
@@ -54,14 +58,11 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle, stand
   // Detect media type and generate candidate paths
   const srcCandidates = useMemo(() => {
     if (isIframe) {
-      setMediaType('iframe');
       return [];
     }
     
     const original = image.url;
     const isVideo = original.endsWith('.mp4');
-    setMediaType(isVideo ? 'video' : 'image');
-    
     if (isVideo) {
       return [original];
     }
@@ -119,16 +120,29 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle, stand
     } else {
       setAspectRatio('square');
     }
-    setIsLoaded(true);
   };
 
-  // Set loaded state for iframes immediately
+  const handleVideoPlaying = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    const video = e.currentTarget as HTMLVideoElement & {
+      requestVideoFrameCallback?: (callback: () => void) => number;
+    };
+    const markFirstFrameVisible = () => {
+      setIsLoaded(true);
+    };
+
+    if (video.requestVideoFrameCallback) {
+      video.requestVideoFrameCallback(markFirstFrameVisible);
+    } else {
+      window.setTimeout(markFirstFrameVisible, 300);
+    }
+  };
+
+  // Establish the embed ratio, but keep the placeholder until the iframe fires load.
   useEffect(() => {
     if (isIframe) {
-      setIsLoaded(true);
-      setAspectRatio('landscape');
+      setAspectRatio(isPortraitEmbed ? 'portrait' : 'landscape');
     }
-  }, [isIframe]);
+  }, [isIframe, isPortraitEmbed]);
 
   // Scroll-triggered animations
   const { scrollYProgress } = useScroll({
@@ -170,22 +184,32 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle, stand
     >
       <motion.div
         style={{
-          scale: index === 0 ? 1 : scale,
-          opacity: index === 0 ? 1 : opacity,
+          scale: mediaType !== 'image' || index === 0 ? 1 : scale,
+          opacity: mediaType !== 'image' || index === 0 ? 1 : opacity,
           width: standardWidth ? `${standardWidth}px` : undefined,
           maxWidth: standardWidth ? '100%' : undefined,
           transformOrigin: 'center center',
         }}
-        className={`will-change-transform transform-gpu ${isPortraitMedia || isPortraitEmbed ? 'w-auto max-w-full' : 'w-full'}`}
+        className={`${mediaType === 'image' ? 'will-change-transform' : ''} ${isPortraitMedia || isPortraitEmbed ? 'w-auto max-w-full' : 'w-full'}`}
       >
         {/* Adaptive container that preserves aspect ratio */}
-        <div className={`relative rounded-xl sm:rounded-2xl overflow-hidden bg-neutral-200/70 dark:bg-neutral-900/80 ${isPortraitMedia || isPortraitEmbed ? 'w-auto max-w-full' : 'w-full'}`}>
+        <div
+          onLoadCapture={(event) => {
+            if (event.target instanceof HTMLIFrameElement) setIsLoaded(true);
+          }}
+          data-media-loaded={isLoaded}
+          className={`media-frame relative rounded-xl sm:rounded-2xl overflow-hidden bg-neutral-200/70 dark:bg-neutral-900/80 ${!isLoaded && !isPortraitEmbed ? 'aspect-video' : ''} ${isPortraitMedia || isPortraitEmbed ? 'w-auto max-w-full' : 'w-full'}`}
+        >
           {/* Skeleton loading animation */}
           {!isLoaded && !hasError && (
-            <div className="absolute inset-0 bg-gradient-to-r from-black/5 via-black/10 to-black/5 dark:from-white/5 dark:via-white/10 dark:to-white/5 animate-pulse flex items-center justify-center">
-              <span className="text-xs font-mono tracking-wider opacity-30 uppercase">
-                {mediaType === 'video' ? 'Video' : mediaType === 'iframe' ? 'Embedded' : 'Image'} · {String(index + 1).padStart(2, '0')}
-              </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/5 via-black/10 to-black/5 dark:from-white/5 dark:via-white/10 dark:to-white/5 flex items-end">
+              <div className="h-[2px] w-full overflow-hidden bg-black/10 dark:bg-white/10">
+                <motion.div
+                  className="h-full w-1/3 bg-black/35 dark:bg-white/45"
+                  animate={{ x: ['-100%', '300%'] }}
+                  transition={{ duration: 1.35, repeat: Infinity, ease: 'linear' }}
+                />
+              </div>
             </div>
           )}
 
@@ -200,7 +224,10 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle, stand
               </span>
             </div>
           ) : mediaType === 'iframe' ? (
-            <div className={`bg-black flex items-center justify-center ${isPortraitEmbed ? 'w-auto max-w-full' : 'w-full'}`}>
+            <div
+              className={`bg-black flex items-center justify-center transition-opacity duration-300 ${isPortraitEmbed ? 'w-auto max-w-full' : 'w-full'}`}
+              style={{ opacity: isLoaded ? 1 : 0 }}
+            >
               <div
                 className={`vimeo-embed relative overflow-hidden ${isPortraitEmbed ? '' : 'w-full'}`}
                 style={standardWidth
@@ -219,9 +246,11 @@ const MediaItem: React.FC<MediaItemProps> = ({ image, index, projectTitle, stand
               loop
               muted
               playsInline
+              preload="auto"
               onLoadedMetadata={handleVideoMetadata}
+              onPlaying={handleVideoPlaying}
               onError={handleError}
-              className={`select-none opacity-100 ${isPortraitMedia && !standardWidth ? 'w-auto h-auto max-w-full max-h-[calc(100svh-180px)]' : 'w-full h-auto'}`}
+              className={`select-none transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${isPortraitMedia && !standardWidth ? 'w-auto h-auto max-w-full max-h-[calc(100svh-180px)]' : 'w-full h-auto'}`}
             />
           ) : (
             <img
@@ -252,31 +281,14 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
   onToggleInfo,
   isAboutOpen = false,
   projectIndex = 0,
+  showInfoToggle = true,
+  showProjectNavigation = true,
 }) => {
-  const [windowWidth, setWindowWidth] = useState(
-    typeof window !== 'undefined' ? window.innerWidth : 1200
-  );
   const [bacioReferenceWidth, setBacioReferenceWidth] = useState<number>();
   const { scrollY } = useScroll();
   const descriptionOpacity = useTransform(scrollY, [0, 180], [1, 0]);
   const descriptionMaxWidth = useTransform(scrollY, [0, 180], ['180px', '0px']);
   const descriptionMargin = useTransform(scrollY, [0, 180], ['8px', '0px']);
-
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const isPanelOpen = isInfoOpen || isAboutOpen;
-
-  const shiftX = isPanelOpen
-    ? windowWidth < 640
-      ? 0
-      : windowWidth < 1024
-      ? -160
-      : -260
-    : 0;
 
   // Keyboard navigation between projects with Left/Right arrow keys
   useEffect(() => {
@@ -306,7 +318,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
   return (
     <div className="relative min-h-screen w-full bg-[#f6f6f7] dark:bg-[#0c0c0e] text-black dark:text-white transition-colors duration-500 overflow-x-hidden">
       {/* Top Right Corner: Floating Info Toggle Button (No border, no drop shadow) */}
-      <div className="fixed top-[58px] sm:top-4 right-3 sm:right-6 z-50 pointer-events-auto">
+      {showInfoToggle && <div className="fixed top-[58px] sm:top-4 right-3 sm:right-6 z-50 pointer-events-auto">
         <button
           type="button"
           onClick={onToggleInfo}
@@ -337,7 +349,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
               : (language === 'pt' ? 'DESCRIÇÃO DO PROJETO' : 'PROJECT INFO')}
           </motion.span>
         </button>
-      </div>
+      </div>}
 
       {/* Slide-out Description & Credits Panel */}
       <ProjectInfoPanel
@@ -350,14 +362,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
 
       {/* Main Image Gallery Stream: 1 Image per line in 16:9, tight spacing, smooth scroll transitions */}
       <motion.main
-        animate={{
-          x: shiftX,
-        }}
-        transition={{
-          duration: 0.55,
-          ease: [0.32, 0.72, 0, 1],
-        }}
-        className={`max-w-[1440px] w-full mx-auto px-4 sm:px-8 lg:px-12 ${isPanelOpen ? 'sm:pl-20 md:pl-24 lg:pl-32' : ''} pt-16 sm:pt-20 pb-24 sm:pb-32 will-change-transform`}
+        className="max-w-[1440px] w-full mx-auto px-4 sm:px-8 lg:px-12 pt-16 sm:pt-20 pb-24 sm:pb-32"
       >
         <section
           aria-label={language === 'pt' ? 'Galeria de imagens' : 'Image gallery'}
@@ -402,16 +407,15 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
       </motion.main>
 
       {/* Fixed Glassmorphism Centered Footer Navigation (Accompanying Scroll) */}
-      <footer className="fixed bottom-3.5 sm:bottom-6 left-0 right-0 z-40 px-3 sm:px-6 flex justify-center pointer-events-none">
+      <motion.footer
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: showProjectNavigation ? 1 : 0, y: showProjectNavigation ? 0 : -10 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        aria-hidden={!showProjectNavigation}
+        className="fixed bottom-3.5 sm:bottom-6 left-0 right-0 z-40 px-3 sm:px-6 flex justify-center pointer-events-none"
+      >
         <motion.nav
-          animate={{
-            x: shiftX,
-          }}
-          transition={{
-            duration: 0.55,
-            ease: [0.32, 0.72, 0, 1],
-          }}
-          className="pointer-events-auto flex items-center justify-center gap-5 sm:gap-7 px-5 sm:px-6 h-[44px] sm:h-[48px] rounded-lg sm:rounded-xl bg-white/50 dark:bg-[#141416]/65 backdrop-blur-2xl backdrop-saturate-150 shadow-none select-none transition-all duration-300"
+          className={`${showProjectNavigation ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center justify-center gap-5 sm:gap-7 px-5 sm:px-6 h-[44px] sm:h-[48px] rounded-lg sm:rounded-xl bg-white/50 dark:bg-[#141416]/65 backdrop-blur-2xl backdrop-saturate-150 shadow-none select-none transition-all duration-300`}
           aria-label={language === 'pt' ? 'Navegação entre projetos' : 'Project navigation'}
         >
           {onPrevProject && (
@@ -442,7 +446,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
             </button>
           )}
         </motion.nav>
-      </footer>
+      </motion.footer>
     </div>
   );
 };
