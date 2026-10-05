@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion, useIsPresent, usePresenceData } from 'motion/react';
 import { Info, X } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 import { PROJECTS } from './data/projects';
 import { ThemeMode, Language } from './types';
 import { Header } from './components/Header';
@@ -493,6 +494,9 @@ export default function App() {
 
       {/* Minimal Circle Mouse Cursor */}
       <CustomCursor />
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
 
       {!isInitialLoadingComplete && (
         <div
