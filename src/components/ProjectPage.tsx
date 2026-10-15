@@ -3,6 +3,10 @@ import { motion, useScroll, useTransform, useSpring } from 'motion/react';
 import { Info, X, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Project, Language } from '../types';
 import { ProjectInfoPanel } from './ProjectInfoPanel';
+import { ClashOnHoldProjectContent } from './ClashOnHoldProjectContent';
+import { SandlerClauseProjectContent } from './SandlerClauseProjectContent';
+import { TuborgProjectContent } from './TuborgProjectContent';
+import { KellogsProjectContent } from './KellogsProjectContent';
 
 interface ProjectPageProps {
   project: Project;
@@ -300,6 +304,11 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
   }, []);
 
   const isPanelOpen = isInfoOpen || isAboutOpen;
+  const isClashOnHold = project.id === 'clash-on-hold';
+  const isSandlerClause = project.id === 'the-sandler-clause';
+  const isTuborg = project.id === 'open-up';
+  const isKellogs = project.id === 'volte-a-ser-crianca';
+  const isFullBleedProject = isClashOnHold || isSandlerClause || isTuborg || isKellogs;
   const shiftX = isPanelOpen
     ? windowWidth < 640
       ? 0
@@ -334,7 +343,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
   }, [project.id]);
 
   return (
-    <div className="relative min-h-screen w-full bg-[#f6f6f7] dark:bg-[#0c0c0e] text-black dark:text-white transition-colors duration-500 overflow-x-hidden">
+    <div className={`relative min-h-screen w-full ${isClashOnHold ? 'bg-white text-[#0d0d0d] dark:bg-[#0d0d0d] dark:text-[#a8a8a8]' : isSandlerClause || isTuborg || isKellogs ? 'bg-white text-[#0d0d0d] dark:bg-[#0d0d0d] dark:text-white' : 'bg-[#f6f6f7] text-black dark:bg-[#0c0c0e] dark:text-white'} transition-colors duration-500 overflow-x-hidden`}>
       {/* Top Right Corner: Floating Info Toggle Button (No border, no drop shadow) */}
       {showInfoToggle && <div className="fixed top-[58px] sm:top-4 right-3 sm:right-6 z-50 pointer-events-auto">
         <button
@@ -380,11 +389,12 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
 
       {/* Main Image Gallery Stream: 1 Image per line in 16:9, tight spacing, smooth scroll transitions */}
       <motion.main
-        animate={{ x: shiftX }}
+        animate={{ x: 0 }}
         transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
-        className={`max-w-[1440px] w-full mx-auto px-4 sm:px-8 lg:px-12 ${isPanelOpen ? 'sm:pl-20 md:pl-24 lg:pl-32' : ''} pt-16 sm:pt-20 pb-24 sm:pb-32 will-change-transform`}
+        style={{ width: isPanelOpen && windowWidth >= 640 ? `calc(100% - ${windowWidth < 1024 ? 384 : 424}px)` : undefined }}
+        className={`${isFullBleedProject ? 'w-full max-w-none' : 'max-w-[1440px] w-full'} ${isPanelOpen && windowWidth >= 640 ? 'ml-0 mr-auto' : 'mx-auto'} ${isFullBleedProject ? 'px-0 pt-0 pb-0' : `px-4 sm:px-8 lg:px-12 ${isPanelOpen ? 'sm:pl-20 md:pl-24 lg:pl-32' : ''} pt-16 sm:pt-20 pb-24 sm:pb-32`} transition-[width] duration-500 will-change-transform`}
       >
-        <section
+        {isClashOnHold ? <ClashOnHoldProjectContent language={language} /> : isSandlerClause ? <SandlerClauseProjectContent language={language} /> : isTuborg ? <TuborgProjectContent language={language} /> : isKellogs ? <KellogsProjectContent language={language} /> : <section
           aria-label={language === 'pt' ? 'Galeria de imagens' : 'Image gallery'}
           className="space-y-6 sm:space-y-8 md:space-y-10"
         >
@@ -423,7 +433,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
               <span className="text-sm opacity-60">Carregando imagens...</span>
             </div>
           )}
-        </section>
+        </section>}
       </motion.main>
 
       {/* Fixed Glassmorphism Centered Footer Navigation (Accompanying Scroll) */}

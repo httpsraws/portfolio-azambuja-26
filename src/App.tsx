@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion, useIsPresent, usePresenceData } from 'motion/react';
 import { Info, X } from 'lucide-react';
-import { PROJECTS } from './data/projects';
+import { HOME_PROJECTS, PROJECTS } from './data/projects';
 import { ThemeMode, Language } from './types';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -98,7 +98,9 @@ export default function App() {
 
   // Active Project & Navigation Direction (dir=2 means reset loop from top-down)
   const [currentIndex, setCurrentIndex] = useState<number>(() => {
-    return initialRouteIndex !== null ? initialRouteIndex : 0;
+    return initialRouteIndex !== null
+      ? initialRouteIndex
+      : PROJECTS.findIndex((project) => project.id === HOME_PROJECTS[0].id);
   });
   const [direction, setDirection] = useState(1);
   const [resetKey, setResetKey] = useState(0);
@@ -259,30 +261,36 @@ export default function App() {
     setLanguage((prev) => (prev === 'pt' ? 'en' : 'pt'));
   };
 
-  const handleSelectProject = (index: number, dir?: number) => {
-    if (dir === 2 || (currentIndex === PROJECTS.length - 1 && index === 0)) {
+  const currentHomeIndex = HOME_PROJECTS.findIndex((project) => project.id === PROJECTS[currentIndex]?.id);
+
+  const handleSelectProject = (homeIndex: number, dir?: number) => {
+    const selectedProject = HOME_PROJECTS[homeIndex];
+    if (!selectedProject) return;
+
+    const projectIndex = PROJECTS.findIndex((project) => project.id === selectedProject.id);
+    if (dir === 2 || (currentHomeIndex === HOME_PROJECTS.length - 1 && homeIndex === 0)) {
       setDirection(2);
       setResetKey((prev) => prev + 1);
-      setCurrentIndex(0);
+      setCurrentIndex(projectIndex);
     } else {
-      setDirection(dir ?? (index >= currentIndex ? 1 : -1));
-      setCurrentIndex(index);
+      setDirection(dir ?? (homeIndex >= currentHomeIndex ? 1 : -1));
+      setCurrentIndex(projectIndex);
     }
   };
 
   const handlePrev = () => {
-    if (currentIndex > 0) {
-      handleSelectProject(currentIndex - 1, -1);
+    if (currentHomeIndex > 0) {
+      handleSelectProject(currentHomeIndex - 1, -1);
     } else {
-      handleSelectProject(PROJECTS.length - 1, -1);
+      handleSelectProject(HOME_PROJECTS.length - 1, -1);
     }
   };
 
   const handleNext = () => {
-    if (currentIndex === PROJECTS.length - 1) {
+    if (currentHomeIndex === HOME_PROJECTS.length - 1) {
       handleSelectProject(0, 2);
     } else {
-      handleSelectProject(currentIndex + 1, 1);
+      handleSelectProject(currentHomeIndex + 1, 1);
     }
   };
 
@@ -458,8 +466,8 @@ export default function App() {
         <>
           {/* 3D Stacked Deck Canvas */}
           <CardStack
-            projects={PROJECTS}
-            currentIndex={currentIndex}
+            projects={HOME_PROJECTS}
+            currentIndex={currentHomeIndex}
             direction={direction}
             resetKey={resetKey}
             onSelectProject={handleSelectProject}
@@ -470,8 +478,8 @@ export default function App() {
 
           {/* Footer Controls & São Paulo Breathing Clock */}
           <Footer
-            currentIndex={currentIndex}
-            totalProjects={PROJECTS.length}
+            currentIndex={currentHomeIndex}
+            totalProjects={HOME_PROJECTS.length}
             currentProject={currentProject}
             language={language}
             onPrev={handlePrev}

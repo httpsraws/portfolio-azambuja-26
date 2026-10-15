@@ -189,9 +189,9 @@ export const PROJECTS: Project[] = [
   {
     id: 'clash-on-hold',
     title: 'Clash On Hold',
-    subtitle: 'Clash of Clans × Netflix OOH Invasion',
+    subtitle: 'Clash of Clans × Invasão OOH da Netflix',
     subtitleEn: 'Clash of Clans × Netflix OOH Invasion',
-    category: 'Out of Home',
+    category: 'Mídia Exterior (OOH)',
     categoryEn: 'Out of Home',
     year: '2026',
     client: 'Clash of Clans',
@@ -199,14 +199,14 @@ export const PROJECTS: Project[] = [
     creativeDirection: 'Filipe Sanches',
     artDirection: 'André Gotz, Ricardo Azambuja, Felipe Pádula',
     copywriting: 'Daniel Fernandes, Giulia Vantini, Pedro Machado',
-    scope: 'Out of Home',
+    scope: 'Mídia Exterior (OOH)',
     scopeEn: 'Out of Home',
     accentColor: '#facc15',
     textColor: 'light',
     bgColor: '#0f172a',
     cardType: 'clash-on-hold',
     coverImage: '/covers/04_Capa_Clash.gif',
-    summary: 'Invasão contextual em obras paradas com OOHs criativos para a nova série da Netflix.',
+    summary: 'Invasão contextual de obras paradas com mídia exterior criativa para a nova série da Netflix.',
     summaryEn: 'Contextual OOH invasion of stalled construction sites for the new Netflix series.',
     description: 'O Clash of Clans é conhecido por duas mecânicas principais: construir e invadir. Para promover a nova série da Netflix, trouxemos essa lógica para o mundo real e "invadimos" canteiros de obras paralisados com anúncios de OOH sagazes, mostrando que quando o assunto é construir, o Clash of Clans entende melhor que ninguém, gerando visibilidade de maneira criativa e contextualizada.',
     descriptionEn: 'Clash of Clans is known for two core mechanics: building and invading. To promote the new Netflix series, we brought this logic to the real world and "invaded" stalled construction sites with witty OOHs, showing that when it comes to building, Clash of Clans knows best, generating visibility in a creative and contextual way.',
@@ -218,7 +218,7 @@ export const PROJECTS: Project[] = [
       { role: 'Redação', roleEn: 'Copywriting', name: 'Daniel Fernandes, Giulia Vantini, Pedro Machado' },
       { role: 'Direção de Arte', roleEn: 'Art Direction', name: 'André Gotz, Ricardo Azambuja, Felipe Pádula' },
       { role: 'Ano', roleEn: 'Year', name: '2026' },
-      { role: 'Categoria', roleEn: 'Category', name: 'Out of Home', nameEn: 'Out of Home' }
+      { role: 'Categoria', roleEn: 'Category', name: 'Mídia Exterior (OOH)', nameEn: 'Out of Home' }
     ],
     images: [
       {
@@ -226,7 +226,7 @@ export const PROJECTS: Project[] = [
         url: '/projects/04 - Clash/01_Clash.mp4',
         caption: '01 / 05 — Clash On Hold: Invasão de canteiros de obras em vídeo',
         captionEn: '01 / 05 — Clash On Hold: Construction site takeover video',
-        alt: 'Construction site OOH video',
+        alt: 'Vídeo de mídia exterior em canteiro de obras',
         embedHTML: '<iframe width="560" height="315" src="https://www.youtube.com/embed/fw-HeOdCrwo?si=7dIF_ZGrHCUze3Rt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
       },
       {
@@ -234,28 +234,28 @@ export const PROJECTS: Project[] = [
         url: '/projects/04 - Clash/02_Clash.webp',
         caption: '02 / 05 — Tapumes de obras envelopados com a mecânica clássica de construção de vilas',
         captionEn: '02 / 05 — Construction hoardings wrapped with classic Clash village building mechanics',
-        alt: 'Scaffolding and wrapped hoardings'
+        alt: 'Andaimes e tapumes envelopados'
       },
       {
         id: 'clash-03',
         url: '/projects/04 - Clash/03_Clash.webp',
         caption: '03 / 05 — Redação bem-humorada provocando o atraso de obras reais vs. upgrades do jogo',
         captionEn: '03 / 05 — Witty copywriting contrasting delayed real-world construction with game upgrades',
-        alt: 'Architectural urban frame'
+        alt: 'Cenário urbano e arquitetônico'
       },
       {
         id: 'clash-04',
         url: '/projects/04 - Clash/04_Clash.webp',
         caption: '04 / 05 — Detalhe da direção de arte inspirada em fitas de isolamento e texturas de concreto',
         captionEn: '04 / 05 — Art direction detail inspired by hazard tape and brutalist concrete textures',
-        alt: 'Graphic hazard and typography detail'
+        alt: 'Detalhe gráfico de sinalização de risco e tipografia'
       },
       {
         id: 'clash-05',
         url: '/projects/04 - Clash/05_Clash.webp',
         caption: '05 / 05 — Visão noturna com iluminação de canteiro destacando o logotipo da Netflix',
         captionEn: '05 / 05 — Night shot with construction site floodlights highlighting Netflix series logo',
-        alt: 'Night construction lighting'
+        alt: 'Iluminação noturna do canteiro de obras'
       }
     ]
   },
@@ -488,60 +488,6 @@ export const PROJECTS: Project[] = [
         caption: '04 / 04 — Tipografia nostálgica combinando traços clássicos e energia moderna',
         captionEn: '04 / 04 — Nostalgic typography pairing classic retro curves with fresh energy',
         alt: 'Typographic poster framing'
-      }
-    ]
-  },
-  {
-    id: 'its-not-a-phase-mom',
-    title: "It's not a phase, mom",
-    subtitle: 'Coca-Cola · Projeto Pessoal',
-    subtitleEn: 'Coca-Cola · Personal Project',
-    category: 'Print',
-    categoryEn: 'Print',
-    year: '2026',
-    client: 'Coca-Cola',
-    creativeDirection: 'Ricardo Azambuja',
-    artDirection: 'Ricardo Azambuja',
-    copywriting: 'Ricardo Azambuja',
-    scope: 'Print',
-    scopeEn: 'Print',
-    accentColor: '#ffffff',
-    textColor: 'light',
-    bgColor: '#991b1b',
-    cardType: 'its-not-a-phase',
-    coverImage: '/covers/08_Capa_CocaCola.png',
-    summary: 'Projeto pessoal explorando subculturas alternativas e a perenidade do ícone Coca-Cola.',
-    summaryEn: 'Personal project exploring alternative subcultures and the enduring icon of Coca-Cola.',
-    description: 'Projeto autoral que une a atemporalidade da Coca-Cola com a estética rebelde, nostálgica e autêntica da cultura emo dos anos 2000. "It\'s not a phase, mom" mergulha na relação visceral entre a identidade juvenil e as paixões que resistem ao teste do tempo, ressignificando o visual icônico da marca através de tipografia gótica, pins metálicos e atitude emo rock.',
-    descriptionEn: 'Personal project blending the timelessness of Coca-Cola with the rebellious, nostalgic, and authentic aesthetic of 2000s emo culture. "It\'s not a phase, mom" delves into the visceral connection between youthful identity and passions that stand the test of time, reinterpreting the brand\'s iconic visual language through gothic typography, enamel pins, and emo rock attitude.',
-    tags: ['Print', 'Projeto Pessoal', 'Coca-Cola', 'Poster', 'Subcultura'],
-    credits: [
-      { role: 'Cliente', roleEn: 'Client', name: 'Coca-Cola' },
-      { role: 'Natureza', roleEn: 'Type', name: 'Projeto Pessoal', nameEn: 'Personal Project' },
-      { role: 'Direção Criativa', roleEn: 'Creative Direction', name: 'Ricardo Azambuja' },
-      { role: 'Redação', roleEn: 'Copywriting', name: 'Ricardo Azambuja' },
-      { role: 'Direção de Arte', roleEn: 'Art Direction', name: 'Ricardo Azambuja' },
-      { role: 'Ano', roleEn: 'Year', name: '2026' },
-      { role: 'Categoria', roleEn: 'Category', name: 'Print', nameEn: 'Print' }
-    ],
-    images: [
-      {
-        url: '/projects/08 - Coca Cola/01_CocaCola.png',
-        caption: "01 / 03 — It's not a phase, mom: Ressignificação da icônica garrafa contour em estética grunge",
-        captionEn: "01 / 03 — It's not a phase, mom: Grunge reinterpretation of the iconic contour bottle",
-        alt: 'Classic Coke bottle in edgy lighting'
-      },
-      {
-        url: '/projects/08 - Coca Cola/02_CocaCola.png',
-        caption: '02 / 03 — Pôster zine experimental com serigrafia artesanal em vermelho e preto profundo',
-        captionEn: '02 / 03 — Experimental zine poster in screenprint crimson and deep black',
-        alt: 'Zine graphic print texture'
-      },
-      {
-        url: '/projects/08 - Coca Cola/03_CocaCola.png',
-        caption: '03 / 03 — Detalhes em letterpress com tachas metálicas e tipografia gótica customizada',
-        captionEn: '03 / 03 — Letterpress details featuring metal studs and custom gothic typography',
-        alt: 'Gothic alternative typography close-up'
       }
     ]
   },
@@ -905,4 +851,17 @@ export const PROJECTS: Project[] = [
       }
     ]
   }
+];
+
+const HOME_FEATURED_PROJECT_IDS = [
+  'the-sandler-clause',
+  'clash-on-hold',
+  'open-up',
+  'volte-a-ser-crianca',
+  'aprender-sem-fritar',
+];
+
+export const HOME_PROJECTS: Project[] = [
+  ...HOME_FEATURED_PROJECT_IDS.map((id) => PROJECTS.find((project) => project.id === id)!).filter(Boolean),
+  ...PROJECTS.filter((project) => !HOME_FEATURED_PROJECT_IDS.includes(project.id)),
 ];

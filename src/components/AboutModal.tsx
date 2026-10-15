@@ -106,11 +106,11 @@ export const AboutModal: React.FC<AboutModalProps> = ({
             ref={modalRef}
             id="about-scroll-container"
             onClick={(e) => e.stopPropagation()}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ x: 20, opacity: 0, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] } }}
-            transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
-            className="fixed right-3 sm:right-6 top-[68px] sm:top-[82px] z-50 w-[calc(100vw-24px)] sm:w-[350px] md:w-[390px] max-h-[calc(100vh-100px)] overflow-y-auto overscroll-contain pointer-events-auto select-text [scrollbar-width:thin] [scrollbar-color:rgba(128,128,128,0.25)_transparent] p-5 sm:p-0 rounded-2xl sm:rounded-none bg-white/95 dark:bg-[#111113]/95 sm:bg-transparent sm:dark:bg-transparent shadow-2xl sm:shadow-none border border-black/5 dark:border-white/10 sm:border-0"
+            initial={{ x: 24, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 24, opacity: 0, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] } }}
+            transition={{ duration: 0.45, delay: 0.5, ease: [0.32, 0.72, 0, 1] }}
+            className="fixed right-3 sm:right-6 top-[68px] sm:top-[82px] z-50 w-[calc(100vw-24px)] sm:w-[360px] md:w-[400px] max-w-[calc(100vw-24px)] max-h-[calc(100vh-100px)] overflow-x-hidden overflow-y-auto overscroll-contain pointer-events-auto select-text [scrollbar-width:thin] [scrollbar-color:rgba(128,128,128,0.25)_transparent] p-5 sm:py-0 sm:pl-5 sm:pr-5 rounded-2xl sm:rounded-none bg-white/95 dark:bg-[#111113]/95 sm:bg-transparent sm:dark:bg-transparent shadow-2xl sm:shadow-none border border-black/5 dark:border-white/10 sm:border-0"
           >
             {/* 3x4 Portrait Photo */}
             <div className="mb-4">
