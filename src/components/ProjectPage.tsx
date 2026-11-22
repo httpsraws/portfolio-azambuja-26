@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'motion/react';
-import { Info, X, ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Project, Language } from '../types';
-import { ProjectInfoPanel } from './ProjectInfoPanel';
+import { ProjectCredits } from './ProjectCredits';
 import { ClashOnHoldProjectContent } from './ClashOnHoldProjectContent';
 import { SandlerClauseProjectContent } from './SandlerClauseProjectContent';
 import { TuborgProjectContent } from './TuborgProjectContent';
@@ -18,11 +18,6 @@ interface ProjectPageProps {
   onPrevProject?: () => void;
   nextProject?: Project;
   prevProject?: Project;
-  isInfoOpen: boolean;
-  onToggleInfo: () => void;
-  isAboutOpen?: boolean;
-  projectIndex?: number;
-  showInfoToggle?: boolean;
   showProjectNavigation?: boolean;
 }
 
@@ -283,42 +278,15 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
   onPrevProject,
   nextProject,
   prevProject,
-  isInfoOpen,
-  onToggleInfo,
-  isAboutOpen = false,
-  projectIndex = 0,
-  showInfoToggle = true,
   showProjectNavigation = true,
 }) => {
-  const [windowWidth, setWindowWidth] = useState(
-    typeof window !== 'undefined' ? window.innerWidth : 1200
-  );
   const [bacioReferenceWidth, setBacioReferenceWidth] = useState<number>();
-  const { scrollY } = useScroll();
-  const descriptionOpacity = useTransform(scrollY, [0, 180], [1, 0]);
-  const descriptionMaxWidth = useTransform(scrollY, [0, 180], ['180px', '0px']);
-  const descriptionMargin = useTransform(scrollY, [0, 180], ['8px', '0px']);
-
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const isPanelOpen = isInfoOpen || isAboutOpen;
   const isClashOnHold = project.id === 'clash-on-hold';
   const isSandlerClause = project.id === 'the-sandler-clause';
   const isTuborg = project.id === 'open-up';
   const isKellogs = project.id === 'volte-a-ser-crianca';
   const caseStudy = CASE_STUDIES[project.id];
   const isFullBleedProject = isClashOnHold || isSandlerClause || isTuborg || isKellogs || Boolean(caseStudy);
-  const shiftX = isPanelOpen
-    ? windowWidth < 640
-      ? 0
-      : windowWidth < 1024
-        ? -160
-        : -260
-    : 0;
 
   // Keyboard navigation between projects with Left/Right arrow keys
   useEffect(() => {
@@ -347,55 +315,9 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
 
   return (
     <div className={`relative min-h-screen w-full ${isClashOnHold ? 'bg-white text-[#0d0d0d] dark:bg-[#0d0d0d] dark:text-[#a8a8a8]' : isSandlerClause || isTuborg || isKellogs || caseStudy ? 'bg-white text-[#0d0d0d] dark:bg-[#0d0d0d] dark:text-white' : 'bg-[#f6f6f7] text-black dark:bg-[#0c0c0e] dark:text-white'} transition-colors duration-500 overflow-x-hidden`}>
-      {/* Top Right Corner: Floating Info Toggle Button (No border, no drop shadow) */}
-      {showInfoToggle && <div className="fixed top-[58px] sm:top-4 right-3 sm:right-6 z-50 pointer-events-auto">
-        <button
-          type="button"
-          onClick={onToggleInfo}
-          className={`group h-[44px] sm:h-[48px] px-3 sm:px-3.5 rounded-lg sm:rounded-xl flex items-center gap-0 transition-all duration-200 cursor-pointer select-none active:scale-95 border-0 shadow-none ${
-            isInfoOpen
-              ? 'bg-white/50 text-black dark:bg-[#141416]/65 dark:text-white hover:bg-black/5 dark:hover:bg-white/10 backdrop-blur-2xl backdrop-saturate-150'
-              : 'bg-white/80 dark:bg-[#141416]/80 backdrop-blur-2xl text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/10'
-          }`}
-          title={language === 'pt' ? 'Informações e créditos' : 'Info & Credits'}
-          aria-label={isInfoOpen
-            ? (language === 'pt' ? 'Fechar informações e créditos' : 'Close info & credits')
-            : (language === 'pt' ? 'Alternar informações e créditos' : 'Toggle info & credits')}
-          aria-expanded={isInfoOpen}
-        >
-          {isInfoOpen
-            ? <X className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2]" />
-            : <Info className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2]" />}
-          <motion.span
-            style={{
-              opacity: isInfoOpen ? 1 : descriptionOpacity,
-              maxWidth: isInfoOpen ? '180px' : descriptionMaxWidth,
-              marginLeft: isInfoOpen ? '8px' : descriptionMargin,
-            }}
-            className="text-[11px] sm:text-xs font-bold tracking-tight whitespace-nowrap overflow-hidden uppercase text-black/65 dark:text-white/65 group-hover:text-black dark:group-hover:text-white"
-          >
-            {isInfoOpen
-              ? (language === 'pt' ? 'FECHAR' : 'CLOSE')
-              : (language === 'pt' ? 'DESCRIÇÃO DO PROJETO' : 'PROJECT INFO')}
-          </motion.span>
-        </button>
-      </div>}
-
-      {/* Slide-out Description & Credits Panel */}
-      <ProjectInfoPanel
-        project={project}
-        isOpen={isInfoOpen}
-        onClose={onToggleInfo}
-        language={language}
-        projectIndex={projectIndex}
-      />
-
       {/* Main Image Gallery Stream: 1 Image per line in 16:9, tight spacing, smooth scroll transitions */}
-      <motion.main
-        animate={{ x: 0 }}
-        transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
-        style={{ width: isPanelOpen && windowWidth >= 640 ? `calc(100% - ${windowWidth < 1024 ? 384 : 424}px)` : undefined }}
-        className={`${isFullBleedProject ? 'w-full max-w-none' : 'max-w-[1440px] w-full'} ${isPanelOpen && windowWidth >= 640 ? 'ml-0 mr-auto' : 'mx-auto'} ${isFullBleedProject ? 'px-0 pt-0 pb-0' : `px-4 sm:px-8 lg:px-12 ${isPanelOpen ? 'sm:pl-20 md:pl-24 lg:pl-32' : ''} pt-16 sm:pt-20 pb-24 sm:pb-32`} transition-[width] duration-500 will-change-transform`}
+      <main
+        className={`mx-auto ${isFullBleedProject ? 'w-full max-w-none px-0 pt-0 pb-0' : 'max-w-[1440px] w-full px-4 sm:px-8 lg:px-12 pt-16 sm:pt-20 pb-4 sm:pb-6'}`}
       >
         {isClashOnHold ? <ClashOnHoldProjectContent language={language} /> : isSandlerClause ? <SandlerClauseProjectContent language={language} /> : isTuborg ? <TuborgProjectContent language={language} /> : isKellogs ? <KellogsProjectContent language={language} /> : caseStudy ? <CaseStudyContent study={caseStudy} language={language} /> : <section
           aria-label={language === 'pt' ? 'Galeria de imagens' : 'Image gallery'}
@@ -437,7 +359,10 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
             </div>
           )}
         </section>}
-      </motion.main>
+      </main>
+
+      {/* Credits: always at the very end of the project page */}
+      <ProjectCredits project={project} language={language} />
 
       {/* Fixed Glassmorphism Centered Footer Navigation (Accompanying Scroll) */}
       <motion.footer
@@ -447,9 +372,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
         aria-hidden={!showProjectNavigation}
         className="fixed bottom-3.5 sm:bottom-6 left-0 right-0 z-40 px-3 sm:px-6 flex justify-center pointer-events-none"
       >
-        <motion.nav
-          animate={{ x: shiftX }}
-          transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
+        <nav
           className={`${showProjectNavigation ? 'pointer-events-auto' : 'pointer-events-none'} flex items-center justify-center gap-5 sm:gap-7 px-5 sm:px-6 h-[44px] sm:h-[48px] rounded-lg sm:rounded-xl bg-white/50 dark:bg-[#141416]/65 backdrop-blur-2xl backdrop-saturate-150 shadow-none select-none transition-colors duration-300`}
           aria-label={language === 'pt' ? 'Navegação entre projetos' : 'Project navigation'}
         >
@@ -480,7 +403,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({
               <ArrowRight className="w-3.5 h-3.5 stroke-[2.2]" />
             </button>
           )}
-        </motion.nav>
+        </nav>
       </motion.footer>
     </div>
   );

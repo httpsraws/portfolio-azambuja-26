@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AnimatePresence, motion, useIsPresent, usePresenceData } from 'motion/react';
-import { Info, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { HOME_PROJECTS, PROJECTS } from './data/projects';
 import { ThemeMode, Language } from './types';
 import { Header } from './components/Header';
@@ -156,7 +156,6 @@ export default function App() {
   const [shouldAnimateProjectNavigation, setShouldAnimateProjectNavigation] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [isInitialLoadingComplete, setIsInitialLoadingComplete] = useState(false);
-  const [isProjectInfoOpen, setIsProjectInfoOpen] = useState(false);
 
   // Top-level page: work (home), about, motion
   const [sitePage, setSitePage] = useState<SitePage>(() => getRoutePage());
@@ -225,13 +224,11 @@ export default function App() {
         setCurrentIndex(routeIndex);
         setIsProjectPageOpen(true);
         setSitePage('work');
-        setIsProjectInfoOpen(false);
         document.title = `${PROJECTS[routeIndex].title} — Azambuja`;
       } else {
         const page = getRoutePage();
         setIsProjectPageOpen(false);
         setSitePage(page);
-        setIsProjectInfoOpen(false);
         document.title = PAGE_TITLES[page];
       }
     };
@@ -283,17 +280,13 @@ export default function App() {
   // Handle ESC key to exit project page or close info drawer
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (isProjectInfoOpen) {
-          setIsProjectInfoOpen(false);
-        } else if (sitePage !== 'work' || isProjectPageOpen) {
-          handleCloseProjectPage();
-        }
+      if (e.key === 'Escape' && (sitePage !== 'work' || isProjectPageOpen)) {
+        handleCloseProjectPage();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isProjectInfoOpen, sitePage, isProjectPageOpen]);
+  }, [sitePage, isProjectPageOpen]);
 
   const handleToggleTheme = () => {
     playClickSound(soundEnabled);
@@ -314,7 +307,6 @@ export default function App() {
     setShouldAnimateProjectNavigation(false);
     setIsPageTransitioning(false);
     setIsProjectPageOpen(false);
-    setIsProjectInfoOpen(false);
     setSitePage(page);
     if (window.location.pathname !== PAGE_PATHS[page]) {
       window.history.pushState({ page }, '', PAGE_PATHS[page]);
@@ -329,10 +321,6 @@ export default function App() {
     handleCloseProjectPage();
   };
 
-  const handleToggleProjectInfo = () => {
-    setIsProjectInfoOpen((prev) => !prev);
-  };
-
   // Opens project page and updates the URL to /01, /02, ...
   const handleOpenProjectPage = useCallback((index?: number, animateFromHome = true, navigationDirection?: number) => {
     const targetIndex = typeof index === 'number' ? index : currentIndex;
@@ -341,7 +329,6 @@ export default function App() {
     setCurrentIndex(targetIndex);
     setIsProjectPageOpen(true);
     setIsPageTransitioning(animateFromHome);
-    setIsProjectInfoOpen(false);
     setSitePage('work');
 
     const slug = getProjectSlug(targetIndex);
@@ -363,7 +350,6 @@ export default function App() {
   const handleCloseProjectPage = useCallback(() => {
     setShouldAnimateProjectNavigation(false);
     setIsProjectPageOpen(false);
-    setIsProjectInfoOpen(false);
     setSitePage('work');
 
     if (window.location.pathname !== '/' && window.location.pathname !== '') {
@@ -421,22 +407,13 @@ export default function App() {
         <div className="fixed top-[58px] sm:top-4 right-3 sm:right-6 z-[55] pointer-events-auto">
           <button
             type="button"
-            onClick={handleToggleProjectInfo}
-            className={`group h-[44px] sm:h-[48px] px-3 sm:px-3.5 rounded-lg sm:rounded-xl flex items-center gap-2 transition-all duration-200 cursor-pointer select-none active:scale-95 border-0 shadow-none ${
-              isProjectInfoOpen
-                ? 'bg-white/50 text-black dark:bg-[#141416]/65 dark:text-white hover:bg-black/5 dark:hover:bg-white/10 backdrop-blur-2xl backdrop-saturate-150'
-                : 'bg-white/80 dark:bg-[#141416]/80 backdrop-blur-2xl text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/10'
-            }`}
-            aria-label={isProjectInfoOpen
-              ? (language === 'pt' ? 'Fechar informações e créditos' : 'Close info and credits')
-              : (language === 'pt' ? 'Informações do projeto' : 'Project info')}
-            aria-expanded={isProjectInfoOpen}
+            onClick={handleCloseProjectPage}
+            className="group h-[44px] sm:h-[48px] px-3 sm:px-3.5 rounded-lg sm:rounded-xl flex items-center gap-2 transition-all duration-200 cursor-pointer select-none active:scale-95 border-0 shadow-none bg-white/80 dark:bg-[#141416]/80 backdrop-blur-2xl text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/10"
+            aria-label={language === 'pt' ? 'Fechar projeto e voltar para Work' : 'Close project and back to Work'}
           >
-            {isProjectInfoOpen ? <X className="w-4 h-4 stroke-[2]" /> : <Info className="w-4 h-4 stroke-[2]" />}
-            <span className="text-[11px] sm:text-xs font-bold tracking-tight uppercase text-black/65 dark:text-white/65">
-              {isProjectInfoOpen
-                ? (language === 'pt' ? 'FECHAR' : 'CLOSE')
-                : (language === 'pt' ? 'INFO DO PROJETO' : 'PROJECT INFO')}
+            <X className="w-4 h-4 stroke-[2]" />
+            <span className="text-[11px] sm:text-xs font-bold tracking-tight uppercase text-black/65 dark:text-white/65 group-hover:text-black dark:group-hover:text-white">
+              {language === 'pt' ? 'FECHAR' : 'CLOSE'}
             </span>
           </button>
         </div>
@@ -462,11 +439,6 @@ export default function App() {
           onPrevProject={handlePrevProjectPage}
           nextProject={nextProject}
           prevProject={prevProject}
-          isInfoOpen={isProjectInfoOpen}
-          isAboutOpen={false}
-          onToggleInfo={handleToggleProjectInfo}
-          projectIndex={currentIndex}
-          showInfoToggle={false}
           showProjectNavigation={!isPageTransitioning}
         />
         </ProjectPageTransitionLayer>
