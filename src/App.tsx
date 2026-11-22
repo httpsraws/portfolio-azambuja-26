@@ -1,13 +1,35 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { AnimatePresence, motion, useIsPresent, usePresenceData } from 'motion/react';
 import { Info, X } from 'lucide-react';
 import { HOME_PROJECTS, PROJECTS } from './data/projects';
 import { ThemeMode, Language } from './types';
 import { Header } from './components/Header';
-import { Footer } from './components/Footer';
-import { CardStack } from './components/CardStack';
+import { FishEyeGrid, WorkView } from './components/FishEyeGrid';
 import { ProjectPage } from './components/ProjectPage';
-import { AboutModal } from './components/AboutModal';
+import { AboutPage } from './components/AboutPage';
+import { MotionPage } from './components/MotionPage';
+
+type SitePage = 'work' | 'about' | 'motion';
+
+const HOME_TITLE = 'Ricardo Azambuja | Creative Art Director';
+const PAGE_TITLES: Record<SitePage, string> = {
+  work: HOME_TITLE,
+  about: 'About — Azambuja',
+  motion: 'Motion — Azambuja',
+};
+const PAGE_PATHS: Record<Exclude<SitePage, 'work'>, string> = {
+  about: '/about',
+  motion: '/motion',
+};
+
+/** Reads the top-level page from the URL: /about (/sobre), /motion, otherwise work */
+const getRoutePage = (): SitePage => {
+  if (typeof window === 'undefined') return 'work';
+  const path = window.location.pathname;
+  if (/^\/(about|sobre)\/?$/i.test(path)) return 'about';
+  if (/^\/motion\/?$/i.test(path)) return 'motion';
+  return 'work';
+};
 import { CustomCursor } from './components/CustomCursor';
 import { playClickSound } from './utils/sound';
 import { getProjectSlug, parseProjectIndexFromLocation } from './utils/routes';
@@ -40,10 +62,12 @@ const ProjectPageTransitionLayer: React.FC<ProjectPageTransitionLayerProps> = ({
       key={projectId}
       custom={presenceData ?? { direction: currentDirection, animate: shouldAnimateTransition }}
       variants={{
-        enter: (data: ProjectPagePresenceData) => ({ x: data.direction > 0 ? '-100vw' : '100vw' }),
+        // Next (direction > 0): new page enters from the right; Previous: from the left
+        enter: (data: ProjectPagePresenceData) => ({ x: data.direction > 0 ? '100vw' : '-100vw' }),
         center: { x: 0 },
         exit: (data: ProjectPagePresenceData) => ({
-          x: data.animate ? (data.direction > 0 ? '100vw' : '-100vw') : 0,
+          // Next: current page leaves to the left; Previous: to the right
+          x: data.animate ? (data.direction > 0 ? '-100vw' : '100vw') : 0,
           transition: { duration: data.animate ? 0.72 : 0 },
         }),
       }}
@@ -102,8 +126,26 @@ export default function App() {
       ? initialRouteIndex
       : PROJECTS.findIndex((project) => project.id === HOME_PROJECTS[0].id);
   });
-  const [direction, setDirection] = useState(1);
-  const [resetKey, setResetKey] = useState(0);
+
+  // Work view: freeview (fish-eye orbit), organic grid or list — remembered per browser
+  const [workView, setWorkView] = useState<WorkView>(() => {
+    try {
+      const saved = localStorage.getItem('rico-portfolio-work-view-v2');
+      if (saved === 'freeview' || saved === 'grid' || saved === 'list') return saved;
+    } catch { /* storage unavailable */ }
+    return 'freeview';
+  });
+  useEffect(() => {
+    try { localStorage.setItem('rico-portfolio-work-view-v2', workView); } catch { /* storage unavailable */ }
+  }, [workView]);
+
+  // Work page scroll container. Scroll position survives opening a project.
+  const homeScrollRef = useRef<HTMLDivElement | null>(null);
+  const homeScrollTopRef = useRef(0);
+  const setHomeScrollRef = useCallback((el: HTMLDivElement | null) => {
+    homeScrollRef.current = el;
+    if (el) el.scrollTop = homeScrollTopRef.current;
+  }, []);
 
   // Dedicated Project Page View state - initialized from URL path
   const [isProjectPageOpen, setIsProjectPageOpen] = useState<boolean>(() => {
@@ -116,8 +158,9 @@ export default function App() {
   const [isInitialLoadingComplete, setIsInitialLoadingComplete] = useState(false);
   const [isProjectInfoOpen, setIsProjectInfoOpen] = useState(false);
 
-  // About modal / drawer state
-  const [isAboutOpen, setIsAboutOpen] = useState(false);
+  // Top-level page: work (home), about, motion
+  const [sitePage, setSitePage] = useState<SitePage>(() => getRoutePage());
+  const isScrollPage = isProjectPageOpen || sitePage !== 'work';
 
   // Preload the animated project covers and use their completion as the initial loading progress.
   useEffect(() => {
@@ -169,7 +212,7 @@ export default function App() {
     if (routeIndex !== null && PROJECTS[routeIndex]) {
       document.title = `${PROJECTS[routeIndex].title} — Azambuja`;
     } else {
-      document.title = 'Ricardo Azambuja | Creative Art Director';
+      document.title = PAGE_TITLES[getRoutePage()];
     }
   }, []);
 
@@ -181,12 +224,15 @@ export default function App() {
       if (routeIndex !== null && PROJECTS[routeIndex]) {
         setCurrentIndex(routeIndex);
         setIsProjectPageOpen(true);
+        setSitePage('work');
         setIsProjectInfoOpen(false);
         document.title = `${PROJECTS[routeIndex].title} — Azambuja`;
       } else {
+        const page = getRoutePage();
         setIsProjectPageOpen(false);
+        setSitePage(page);
         setIsProjectInfoOpen(false);
-        document.title = 'Ricardo Azambuja | Creative Art Director';
+        document.title = PAGE_TITLES[page];
       }
     };
 
@@ -198,9 +244,9 @@ export default function App() {
     };
   }, []);
 
-  // Manage window scrolling based on whether project page is open
+  // Manage window scrolling based on whether a project / about page is open
   useEffect(() => {
-    if (isProjectPageOpen) {
+    if (isScrollPage) {
       document.body.style.overflowY = 'auto';
       document.body.style.overflowX = 'hidden';
       document.documentElement.style.overflowY = 'auto';
@@ -214,7 +260,7 @@ export default function App() {
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
     };
-  }, [isProjectPageOpen]);
+  }, [isScrollPage, sitePage]);
 
   // Sync theme with HTML document class and data-theme attribute
   useEffect(() => {
@@ -240,16 +286,14 @@ export default function App() {
       if (e.key === 'Escape') {
         if (isProjectInfoOpen) {
           setIsProjectInfoOpen(false);
-        } else if (isAboutOpen) {
-          setIsAboutOpen(false);
-        } else if (isProjectPageOpen) {
+        } else if (sitePage !== 'work' || isProjectPageOpen) {
           handleCloseProjectPage();
         }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isProjectInfoOpen, isAboutOpen, isProjectPageOpen]);
+  }, [isProjectInfoOpen, sitePage, isProjectPageOpen]);
 
   const handleToggleTheme = () => {
     playClickSound(soundEnabled);
@@ -261,57 +305,32 @@ export default function App() {
     setLanguage((prev) => (prev === 'pt' ? 'en' : 'pt'));
   };
 
-  const currentHomeIndex = HOME_PROJECTS.findIndex((project) => project.id === PROJECTS[currentIndex]?.id);
-
-  const handleSelectProject = (homeIndex: number, dir?: number) => {
-    const selectedProject = HOME_PROJECTS[homeIndex];
-    if (!selectedProject) return;
-
-    const projectIndex = PROJECTS.findIndex((project) => project.id === selectedProject.id);
-    if (dir === 2 || (currentHomeIndex === HOME_PROJECTS.length - 1 && homeIndex === 0)) {
-      setDirection(2);
-      setResetKey((prev) => prev + 1);
-      setCurrentIndex(projectIndex);
-    } else {
-      setDirection(dir ?? (homeIndex >= currentHomeIndex ? 1 : -1));
-      setCurrentIndex(projectIndex);
+  // Opens one of the top-level pages (About / Motion). Clicking the active one returns to Work.
+  const handleOpenPage = (page: Exclude<SitePage, 'work'>) => {
+    if (sitePage === page && !isProjectPageOpen) {
+      handleCloseProjectPage();
+      return;
     }
+    setShouldAnimateProjectNavigation(false);
+    setIsPageTransitioning(false);
+    setIsProjectPageOpen(false);
+    setIsProjectInfoOpen(false);
+    setSitePage(page);
+    if (window.location.pathname !== PAGE_PATHS[page]) {
+      window.history.pushState({ page }, '', PAGE_PATHS[page]);
+    }
+    document.title = PAGE_TITLES[page];
   };
 
-  const handlePrev = () => {
-    if (currentHomeIndex > 0) {
-      handleSelectProject(currentHomeIndex - 1, -1);
-    } else {
-      handleSelectProject(HOME_PROJECTS.length - 1, -1);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentHomeIndex === HOME_PROJECTS.length - 1) {
-      handleSelectProject(0, 2);
-    } else {
-      handleSelectProject(currentHomeIndex + 1, 1);
-    }
-  };
-
-  const handleToggleAbout = () => {
-    setIsAboutOpen((prev) => {
-      const next = !prev;
-      if (next) {
-        setIsProjectInfoOpen(false);
-      }
-      return next;
-    });
+  // Back to Work, optionally switching the view (freeview / grid / list)
+  const handleGoToWork = (view?: WorkView) => {
+    if (view) setWorkView(view);
+    homeScrollTopRef.current = 0;
+    handleCloseProjectPage();
   };
 
   const handleToggleProjectInfo = () => {
-    setIsProjectInfoOpen((prev) => {
-      const next = !prev;
-      if (next) {
-        setIsAboutOpen(false);
-      }
-      return next;
-    });
+    setIsProjectInfoOpen((prev) => !prev);
   };
 
   // Opens project page and updates the URL to /01, /02, ...
@@ -323,7 +342,7 @@ export default function App() {
     setIsProjectPageOpen(true);
     setIsPageTransitioning(animateFromHome);
     setIsProjectInfoOpen(false);
-    setIsAboutOpen(false);
+    setSitePage('work');
 
     const slug = getProjectSlug(targetIndex);
     const targetPath = `/${slug}`;
@@ -335,12 +354,17 @@ export default function App() {
     }
   }, [currentIndex]);
 
+  const handleOpenProjectById = useCallback((projectId: string) => {
+    const index = PROJECTS.findIndex((project) => project.id === projectId);
+    if (index >= 0) handleOpenProjectPage(index);
+  }, [handleOpenProjectPage]);
+
   // Closes project page and updates URL to /
   const handleCloseProjectPage = useCallback(() => {
     setShouldAnimateProjectNavigation(false);
     setIsProjectPageOpen(false);
     setIsProjectInfoOpen(false);
-    setIsAboutOpen(false);
+    setSitePage('work');
 
     if (window.location.pathname !== '/' && window.location.pathname !== '') {
       window.history.pushState({}, '', '/');
@@ -348,32 +372,29 @@ export default function App() {
     document.title = 'Ricardo Azambuja | Creative Art Director';
   }, []);
 
-  // Navigation handlers inside ProjectPage view
+  // Navigation inside ProjectPage follows the site numbering (HOME_PROJECTS: 01 … 11),
+  // not the internal order of the PROJECTS data array.
+  const homePosition = Math.max(0, HOME_PROJECTS.findIndex((p) => p.id === PROJECTS[currentIndex]?.id));
+  const neighbourIndex = (offset: number) => {
+    const target = HOME_PROJECTS[(homePosition + offset + HOME_PROJECTS.length) % HOME_PROJECTS.length];
+    return PROJECTS.findIndex((p) => p.id === target.id);
+  };
+
   const handleNextProjectPage = useCallback(() => {
-    const nextIdx = (currentIndex + 1) % PROJECTS.length;
-    handleOpenProjectPage(nextIdx, false, 1);
-  }, [currentIndex, handleOpenProjectPage]);
+    handleOpenProjectPage(neighbourIndex(1), false, 1);
+  }, [homePosition, handleOpenProjectPage]);
 
   const handlePrevProjectPage = useCallback(() => {
-    const prevIdx = (currentIndex - 1 + PROJECTS.length) % PROJECTS.length;
-    handleOpenProjectPage(prevIdx, false, -1);
-  }, [currentIndex, handleOpenProjectPage]);
+    handleOpenProjectPage(neighbourIndex(-1), false, -1);
+  }, [homePosition, handleOpenProjectPage]);
 
   const currentProject = PROJECTS[currentIndex];
-  const nextProject = PROJECTS[(currentIndex + 1) % PROJECTS.length];
-  const prevProject = PROJECTS[(currentIndex - 1 + PROJECTS.length) % PROJECTS.length];
-  const sidePanelShiftX = isProjectPageOpen && (isProjectInfoOpen || isAboutOpen)
-    ? windowWidth < 640
-      ? 0
-      : windowWidth < 1024
-      ? -160
-      : -260
-    : 0;
-
+  const nextProject = PROJECTS[neighbourIndex(1)];
+  const prevProject = PROJECTS[neighbourIndex(-1)];
   return (
     <div
       className={`relative w-full transition-colors duration-500 ${
-        isProjectPageOpen
+        isScrollPage
           ? 'min-h-screen overflow-x-hidden overflow-y-visible'
           : 'w-screen h-screen overflow-hidden select-none'
       }`}
@@ -390,10 +411,10 @@ export default function App() {
         language={language}
         onToggleTheme={handleToggleTheme}
         onToggleLanguage={handleToggleLanguage}
-        onOpenAbout={handleToggleAbout}
-        isAboutOpen={isAboutOpen}
-        onGoHome={handleCloseProjectPage}
-        isProjectOpen={isProjectPageOpen}
+        activePage={isProjectPageOpen ? 'work' : sitePage}
+        onOpenAbout={() => handleOpenPage('about')}
+        onOpenMotion={() => handleOpenPage('motion')}
+        onGoHome={() => handleGoToWork()}
       />
 
       {isInitialLoadingComplete && isProjectPageOpen && (
@@ -442,7 +463,7 @@ export default function App() {
           nextProject={nextProject}
           prevProject={prevProject}
           isInfoOpen={isProjectInfoOpen}
-          isAboutOpen={isAboutOpen}
+          isAboutOpen={false}
           onToggleInfo={handleToggleProjectInfo}
           projectIndex={currentIndex}
           showInfoToggle={false}
@@ -451,7 +472,7 @@ export default function App() {
         </ProjectPageTransitionLayer>
       )}
       </AnimatePresence>
-      {isInitialLoadingComplete && (!isProjectPageOpen || isPageTransitioning) && (
+      {isInitialLoadingComplete && ((!isProjectPageOpen && sitePage === 'work') || isPageTransitioning) && (
         <motion.div
           initial={false}
           animate={isPageTransitioning ? { scale: [1, 0.88, 0.88], y: ['0vh', '0vh', '-110vh'] } : { scale: 1, y: '0vh' }}
@@ -463,41 +484,46 @@ export default function App() {
             backgroundColor: theme === 'dark' ? '#0d0d0d' : '#eeeeee',
           }}
         >
-        <>
-          {/* 3D Stacked Deck Canvas */}
-          <CardStack
-            projects={HOME_PROJECTS}
-            currentIndex={currentHomeIndex}
-            direction={direction}
-            resetKey={resetKey}
-            onSelectProject={handleSelectProject}
-            onOpenDetail={() => handleOpenProjectPage()}
-            soundEnabled={soundEnabled}
-            isInfoOpen={isAboutOpen}
-          />
-
-          {/* Footer Controls & São Paulo Breathing Clock */}
-          <Footer
-            currentIndex={currentHomeIndex}
-            totalProjects={HOME_PROJECTS.length}
-            currentProject={currentProject}
-            language={language}
-            onPrev={handlePrev}
-            onNext={handleNext}
-            onOpenDetail={() => handleOpenProjectPage()}
-            isAboutOpen={isAboutOpen}
-          />
-        </>
+          {/* Work page: freeview / grid / list */}
+          <div
+            ref={setHomeScrollRef}
+            onScroll={(e) => { homeScrollTopRef.current = e.currentTarget.scrollTop; }}
+            className="home-scroll absolute inset-0 overflow-y-auto overflow-x-hidden"
+          >
+            <FishEyeGrid
+              projects={HOME_PROJECTS}
+              language={language}
+              onOpenProject={handleOpenProjectById}
+              scrollContainer={homeScrollRef}
+              view={workView}
+              onChangeView={setWorkView}
+            />
+          </div>
         </motion.div>
       )}
 
-      {/* Designer Info / Right Lateral Drawer */}
-      <AboutModal
-        isOpen={isAboutOpen}
-        onClose={() => setIsAboutOpen(false)}
-        language={language}
-        isOutsideHome={isProjectPageOpen}
-      />
+      {/* About & Motion pages */}
+      {isInitialLoadingComplete && sitePage !== 'work' && !isProjectPageOpen && (
+        <motion.div
+          key={sitePage}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
+          className="relative z-10"
+        >
+          {sitePage === 'about' ? (
+            <AboutPage language={language} />
+          ) : (
+            <MotionPage
+              language={language}
+              onOpenProject={(projectId) => {
+                const index = PROJECTS.findIndex((project) => project.id === projectId);
+                if (index >= 0) handleOpenProjectPage(index, false);
+              }}
+            />
+          )}
+        </motion.div>
+      )}
 
       {/* Minimal Circle Mouse Cursor */}
       <CustomCursor />

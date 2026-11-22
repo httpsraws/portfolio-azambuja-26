@@ -1,0 +1,184 @@
+/* ==========================================================================
+   MOTION — reel + filterable masonry of films and animations
+   ========================================================================== */
+.mo-root {
+  min-height: 100vh;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 0 clamp(16px, 2vw, 28px) clamp(80px, 14vh, 160px);
+}
+
+.mo-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: clamp(96px, 14vh, 140px) 0 clamp(28px, 5vh, 48px);
+}
+.mo-title {
+  font-size: clamp(34px, 6vw, 96px);
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+}
+.mo-title sup {
+  font-size: 0.22em;
+  letter-spacing: 0;
+  margin-left: 0.35em;
+  vertical-align: super;
+  opacity: 0.5;
+  font-variant-numeric: tabular-nums;
+}
+.mo-lead { max-width: 300px; text-align: right; opacity: 0.55; font-size: 12px; }
+.mo-dim { opacity: 0.45; }
+
+/* Reel */
+.mo-reel__frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #000;
+}
+.mo-reel__video,
+.mo-reel__poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mo-reel__poster { position: absolute; inset: 0; border: 0; padding: 0; background: none; cursor: pointer; }
+.mo-reel__caption { display: flex; justify-content: space-between; gap: 12px; padding-top: 10px; font-size: 12px; }
+
+/* Play pill */
+.mo-play {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0a0a0a;
+  font-size: 12px;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+}
+
+/* Filters */
+.mo-filters {
+  display: flex;
+  gap: 18px;
+  padding: clamp(96px, 14vh, 136px) 0 18px;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-color) 14%, transparent);
+  margin-bottom: clamp(20px, 3vw, 36px);
+}
+.mo-filters button {
+  position: relative;
+  background: none; border: 0; padding: 0 0 2px;
+  color: inherit; font-size: 13px;
+  opacity: 0.4;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.mo-filters button:hover { opacity: 0.8; }
+.mo-filters button.is-active { opacity: 1; }
+.mo-filters button.is-active::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor;
+}
+
+/* Masonry */
+.mo-grid {
+  columns: 3;
+  column-gap: clamp(12px, 1.6vw, 24px);
+}
+@media (max-width: 1024px) { .mo-grid { columns: 2; } }
+@media (max-width: 600px) { .mo-grid { columns: 1; } }
+
+.mo-item {
+  break-inside: avoid;
+  margin-bottom: clamp(24px, 3vw, 44px);
+}
+.mo-media {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text-color) 7%, transparent);
+}
+.mo-media.is-film { cursor: pointer; }
+.mo-media__el { width: 100%; height: 100%; object-fit: cover; display: block; user-select: none; }
+.mo-media.is-film .mo-play { opacity: 0; transform: translate(-50%, -40%); }
+.mo-media.is-film:hover .mo-play,
+.mo-media.is-film:focus-visible .mo-play { opacity: 1; transform: translate(-50%, -50%); }
+.mo-media:focus-visible { outline: 2px solid var(--text-color); outline-offset: 3px; }
+@media (hover: none) { .mo-media.is-film .mo-play { opacity: 1; transform: translate(-50%, -50%); } }
+
+.mo-caption {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 12px;
+  padding-top: 10px;
+  font-size: 12px;
+}
+.mo-caption__title { font-weight: 500; }
+.mo-caption .mo-dim { grid-column: 1; }
+.mo-caption__link {
+  grid-column: 2; grid-row: 1 / span 2;
+  align-self: start;
+  background: none; border: 0; padding: 0;
+  color: inherit; font-size: 12px;
+  opacity: 0.45;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.mo-caption__link:hover { opacity: 1; }
+
+/* Player */
+.mo-player {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 72px 16px 32px;
+  background: rgba(8, 8, 8, 0.94);
+  color: #f2f2f2;
+}
+.mo-player__frame {
+  width: min(92vw, calc((100vh - 160px) * var(--w, 1.7778)));
+  max-height: calc(100vh - 160px);
+  background: #000;
+}
+.mo-player__frame[style*="9 / 16"] { width: auto; height: calc(100vh - 160px); }
+.mo-player__frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+.mo-player__close {
+  position: absolute; top: 20px; right: 20px;
+  display: flex; align-items: center; gap: 6px;
+  background: none; border: 0; color: inherit; font-size: 12px;
+  opacity: 0.7; cursor: pointer;
+}
+.mo-player__close:hover { opacity: 1; }
+.mo-player__title { font-size: 12px; opacity: 0.6; }
+
+@media (max-width: 639px) {
+  .mo-head { flex-direction: column; align-items: flex-start; }
+  .mo-lead { text-align: left; }
+}
+
+/* Reel placeholder: a quiet still frame until the reel is published */
+.mo-reel__frame:has(.mo-reel__soon) { background: color-mix(in srgb, var(--text-color) 6%, transparent); aspect-ratio: 21 / 9; }
+.mo-reel__soon {
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding: clamp(14px, 1.6vw, 24px);
+  font-size: 12px;
+}
+
+/* Multiple cuts of one film: 01 · 02 */
+.mo-cuts { grid-column: 1; display: flex; gap: 10px; margin-top: 4px; }
+.mo-cuts button {
+  background: none; border: 0; padding: 0;
+  color: inherit; font-size: 12px; font-variant-numeric: tabular-nums;
+  text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--text-color) 30%, transparent);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.mo-cuts button:hover { text-decoration-color: currentColor; }
