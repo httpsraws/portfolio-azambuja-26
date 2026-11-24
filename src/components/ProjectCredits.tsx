@@ -6,7 +6,7 @@ interface ProjectCreditsProps {
   language: Language;
 }
 
-type TeamKey = 'creative' | 'art' | 'copy';
+type TeamKey = 'creative' | 'art' | 'copy' | 'edit';
 
 interface CreditEntry {
   role: string;
@@ -15,13 +15,14 @@ interface CreditEntry {
 }
 
 // Team roles always share one row, in this order.
-const TEAM_ORDER: TeamKey[] = ['creative', 'art', 'copy'];
+const TEAM_ORDER: TeamKey[] = ['creative', 'art', 'copy', 'edit'];
 
 const getTeamKey = (role: string, roleEn?: string): TeamKey | undefined => {
   const text = `${role} ${roleEn ?? ''}`.toLowerCase();
   if (text.includes('direção criativa') || text.includes('creative direct')) return 'creative';
   if (text.includes('direção de arte') || text.includes('art direct')) return 'art';
   if (text.includes('redação') || text.includes('copywrit')) return 'copy';
+  if (text.includes('edição') || text.includes('editing') || text.includes('video edit')) return 'edit';
   return undefined;
 };
 
@@ -119,8 +120,12 @@ export const ProjectCredits: React.FC<ProjectCreditsProps> = ({ project, languag
           </h2>
           {/* One shared grid so every row lines up on the same columns.
               The team (creative direction, art direction, copywriting) starts its own row
-              and, with at least 3 columns at every width, always stays on a single line. */}
-          <dl className="grid grid-cols-3 gap-x-4 gap-y-6 sm:gap-x-8 sm:gap-y-8 lg:grid-cols-4">
+              and always stays on a single line (4 columns at every width when the team has 4 people). */}
+          <dl
+            className={`grid gap-x-4 gap-y-6 sm:gap-x-8 sm:gap-y-8 ${
+              team.length > 3 ? 'grid-cols-4' : 'grid-cols-3 lg:grid-cols-4'
+            }`}
+          >
             {details.map((credit, idx) => <CreditItem key={`d-${idx}`} credit={credit} />)}
             {team.map((credit, idx) => (
               <CreditItem key={`t-${idx}`} credit={credit} className={idx === 0 ? 'col-start-1' : undefined} />

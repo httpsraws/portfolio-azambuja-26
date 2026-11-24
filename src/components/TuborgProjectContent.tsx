@@ -6,10 +6,10 @@ interface TuborgProjectContentProps {
 }
 
 const posters = [
-  { src: '/projects/tuborg-figma/poster-01.png', alt: 'Cartaz da Tuborg para o jogo de pebolim', altEn: 'Tuborg foosball game poster' },
-  { src: '/projects/tuborg-figma/poster-02.png', alt: 'Cartaz da Tuborg para uma partida de sinuca', altEn: 'Tuborg pool game poster' },
-  { src: '/projects/tuborg-figma/poster-03.png', alt: 'Cartaz da Tuborg para uma partida de dardos', altEn: 'Tuborg darts game poster' },
-  { src: '/projects/tuborg-figma/poster-04.png', alt: 'Cartaz da Tuborg para uma partida de pôquer', altEn: 'Tuborg poker game poster' },
+  { src: '/projects/tuborg-figma/poster-01.jpg', alt: 'Cartaz da Tuborg para o jogo de pebolim', altEn: 'Tuborg foosball game poster' },
+  { src: '/projects/tuborg-figma/poster-02.jpg', alt: 'Cartaz da Tuborg para uma partida de sinuca', altEn: 'Tuborg pool game poster' },
+  { src: '/projects/tuborg-figma/poster-03.jpg', alt: 'Cartaz da Tuborg para uma partida de dardos', altEn: 'Tuborg darts game poster' },
+  { src: '/projects/tuborg-figma/poster-04.jpg', alt: 'Cartaz da Tuborg para uma partida de pôquer', altEn: 'Tuborg poker game poster' },
 ];
 
 export const TuborgProjectContent: React.FC<TuborgProjectContentProps> = ({ language }) => {

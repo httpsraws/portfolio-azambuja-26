@@ -7,12 +7,12 @@ interface SandlerClauseProjectContentProps {
 
 const media = [
   {
-    src: '/projects/the-sandler-clause-figma/media-01.png',
+    src: '/projects/the-sandler-clause-figma/media-01.jpg',
     alt: 'Peça de mídia exterior da campanha The Sandler Clause',
     altEn: 'The Sandler Clause out-of-home campaign creative',
   },
   {
-    src: '/projects/the-sandler-clause-figma/media-02.png',
+    src: '/projects/the-sandler-clause-figma/media-02.jpg',
     alt: 'Anúncio da Verizon com Adam Sandler em um painel de mídia exterior',
     altEn: 'Verizon ad featuring Adam Sandler on an out-of-home display',
   },
@@ -76,7 +76,7 @@ export const SandlerClauseProjectContent: React.FC<SandlerClauseProjectContentPr
 
       <figure className="aspect-[16/9] w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900">
         <img
-          src="/projects/the-sandler-clause-figma/logo-16-9.png"
+          src="/projects/the-sandler-clause-figma/logo-16-9.jpg"
           alt={isPortuguese ? 'Anúncio da Verizon com a cláusula de Adam Sandler' : 'Verizon ad featuring the Adam Sandler Clause'}
           loading="lazy"
           className="h-full w-full object-cover"
@@ -106,7 +106,7 @@ export const SandlerClauseProjectContent: React.FC<SandlerClauseProjectContentPr
 
       <div className="aspect-video w-full overflow-hidden bg-[#ee0000]">
         <img
-          src="/projects/the-sandler-clause-figma/signature-16-9.png"
+          src="/projects/the-sandler-clause-figma/signature-16-9.webp"
           alt={isPortuguese ? 'Assinatura visual da Verizon' : 'Verizon brand signature'}
           loading="lazy"
           className="h-full w-full object-cover"

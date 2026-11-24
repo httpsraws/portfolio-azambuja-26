@@ -20,7 +20,7 @@ export const PROJECTS: Project[] = [
     textColor: 'dark',
     bgColor: '#f5f0eb',
     cardType: 'bacio-zero',
-    coverImage: '/covers/01_Capa_Bacio.gif',
+    coverImage: '/covers/01_Capa_Bacio.webp',
     summary: 'Campanha de lançamento da nova linha de produtos zero da Bacio di Latte.',
     summaryEn: "Launch campaign for Bacio di Latte's new line of zero-sugar products.",
     description: 'Campanha de lançamento da nova linha de produtos zero da Bacio di Latte. Com elegância, frescor e sofisticação artesanal, a comunicação destaca a pureza dos ingredientes e o sabor inconfundível do autêntico gelato italiano, provando que zero açúcar mantém 100% da experiência indulgente.',
@@ -61,6 +61,42 @@ export const PROJECTS: Project[] = [
     ]
   },
   {
+    id: 'picole-oficial-rock-in-rio',
+    title: 'Picolé Oficial',
+    subtitle: 'Bacio di Latte × Rock in Rio Brasil 2026',
+    subtitleEn: 'Bacio di Latte × Rock in Rio Brasil 2026',
+    category: 'Campanha Integrada',
+    categoryEn: 'Integrated Campaign',
+    year: '2026',
+    client: 'Bacio di Latte',
+    agency: 'Duuna',
+    creativeDirection: 'Rafael do Nascimento Fernandes',
+    artDirection: 'Ricardo Azambuja',
+    copywriting: 'Luiz Otavio Medeiros',
+    scope: 'Campanha Integrada',
+    scopeEn: 'Integrated Campaign',
+    accentColor: '#4a2a1f',
+    textColor: 'light',
+    bgColor: '#c8811f',
+    cardType: 'picole-oficial-rock-in-rio',
+    coverImage: '/covers/13_Capa_BacioRockInRio.jpg',
+    summary: 'A Bacio di Latte é o picolé oficial do Rock in Rio Brasil 2026.',
+    summaryEn: 'Bacio di Latte is the official popsicle of Rock in Rio Brasil 2026.',
+    description: 'Campanha que anuncia a Bacio di Latte como picolé oficial do Rock in Rio Brasil 2026. Unindo a sofisticação do autêntico gelato italiano à atitude do maior festival de música do país, a comunicação parte de uma ideia simples: assim como o Rock in Rio, o picolé da Bacio di Latte é um clássico. O conceito se desdobra em key visual, peças sociais, embalagens, ilustrações e mídia exterior.',
+    descriptionEn: "Campaign announcing Bacio di Latte as the official popsicle of Rock in Rio Brasil 2026. Bringing together the sophistication of authentic Italian gelato and the attitude of the country's biggest music festival, the work starts from a simple idea: just like Rock in Rio, Bacio di Latte's popsicle is a classic. The concept unfolds across key visual, social pieces, packaging, illustrations and out-of-home media.",
+    tags: ['Campanha Integrada', 'Key Visual', 'Direção de Arte', 'Rock in Rio', 'Gelato Italiano'],
+    credits: [
+      { role: 'Cliente', roleEn: 'Client', name: 'Bacio di Latte' },
+      { role: 'Agência', roleEn: 'Agency', name: 'Duuna' },
+      { role: 'Ano', roleEn: 'Year', name: '2026' },
+      { role: 'Direção Criativa', roleEn: 'Creative Direction', name: 'Rafael do Nascimento Fernandes' },
+      { role: 'Direção de Arte', roleEn: 'Art Direction', name: 'Ricardo Azambuja' },
+      { role: 'Redação', roleEn: 'Copywriting', name: 'Luiz Otavio Medeiros' },
+      { role: 'Edição', roleEn: 'Video Editing', name: 'Gabriela Zatta' },
+      { role: 'Categoria', roleEn: 'Category', name: 'Campanha Integrada', nameEn: 'Integrated Campaign' }
+    ],
+  },
+  {
     id: 'cartela-brahmiada',
     title: 'Cartela Brahmiada',
     subtitle: 'Ambev × Botecos Boa Praça & Tatu Bola',
@@ -79,7 +115,7 @@ export const PROJECTS: Project[] = [
     textColor: 'dark',
     bgColor: '#f59e0b',
     cardType: 'cartela-brahmiada',
-    coverImage: '/covers/02_Capa_Alife.gif',
+    coverImage: '/covers/02_Capa_Alife.webp',
     summary: 'Parceria dos botecos Boa Praça e Tatu Bola com a Ambev realizada durante a Copa do Mundo de 2026.',
     summaryEn: 'Partnership between the Boa Praça and Tatu Bola bars with Ambev, held during the 2026 World Cup.',
     description: 'Cartela Brahmiada é uma parceria dos botecos Boa Praça e Tatu Bola com a Ambev realizada durante a Copa do Mundo de 2026. A campanha celebra a vibração inigualável dos torcedores reunidos na mesa de bar, unindo a paixão pelo futebol, chopp trincando e a atmosfera calorosa dos tradicionais botecos brasileiros.',
@@ -132,7 +168,7 @@ export const PROJECTS: Project[] = [
     textColor: 'light',
     bgColor: '#b91c1c',
     cardType: 'sandler-clause',
-    coverImage: '/covers/03_Capa_Verizon.gif',
+    coverImage: '/covers/03_Capa_Verizon.webp',
     summary: 'A Verizon enfrenta o desafio de comunicar à Geração Z um serviço sem cláusulas ocultas com Adam Sandler.',
     summaryEn: 'Verizon faces the challenge of communicating to Gen Z a reliable service without hidden clauses.',
     description: 'A Verizon apresenta The Sandler Clause. A Verizon enfrenta o desafio de comunicar à Geração Z que, além de oferecer um excelente custo-benefício, o serviço é rápido e confiável, sem cláusulas ocultas em seus termos de contrato. Adam Sandler, o astro norte-americano e símbolo de estilo único e autenticidade, é o protagonista da campanha com The Sandler Clause, uma forma exclusiva e divertida de contratar serviços de telefonia móvel sem taxas escondidas ou cobranças adicionais.',
@@ -158,28 +194,28 @@ export const PROJECTS: Project[] = [
       },
       {
         id: 'sandler-02',
-        url: '/projects/03 - Verizon/02_Verizon.png',
+        url: '/projects/03 - Verizon/02_Verizon.jpg',
         caption: '02 / 06 — Interface móvel simplificada: Termos sem entrelinhas e transparência total',
         captionEn: '02 / 06 — Simplified mobile UI: Zero fine print and total transparency',
         alt: 'Mobile interface design'
       },
       {
         id: 'sandler-03',
-        url: '/projects/03 - Verizon/03_Verizon.png',
+        url: '/projects/03 - Verizon/03_Verizon.jpg',
         caption: '03 / 06 — Peças digitais com o tom autêntico e bem-humorado de Adam Sandler',
         captionEn: '03 / 06 — Digital visual assets with Adam Sandler iconic comedic tone',
         alt: 'Young creators in studio'
       },
       {
         id: 'sandler-04',
-        url: '/projects/03 - Verizon/04_Verizon.png',
+        url: '/projects/03 - Verizon/04_Verizon.jpg',
         caption: '04 / 06 — Pôsteres tipográficos de alto contraste inspirados em cláusulas contratuais',
         captionEn: '04 / 06 — High-contrast typographic posters inspired by contractual clauses',
         alt: 'Typographic contract poster'
       },
       {
         id: 'sandler-05',
-        url: '/projects/03 - Verizon/05_Verizon.png',
+        url: '/projects/03 - Verizon/05_Verizon.jpg',
         caption: '05 / 05 — Ativações OOH interativas nas principais cidades norte-americanas',
         captionEn: '05 / 05 — Interactive OOH urban billboards in major cities',
         alt: 'Urban billboard showcase'
@@ -205,7 +241,7 @@ export const PROJECTS: Project[] = [
     textColor: 'light',
     bgColor: '#0f172a',
     cardType: 'clash-on-hold',
-    coverImage: '/covers/04_Capa_Clash.gif',
+    coverImage: '/covers/04_Capa_Clash.webp',
     summary: 'Invasão contextual de obras paradas com mídia exterior criativa para a nova série da Netflix.',
     summaryEn: 'Contextual OOH invasion of stalled construction sites for the new Netflix series.',
     description: 'O Clash of Clans é conhecido por duas mecânicas principais: construir e invadir. Para promover a nova série da Netflix, trouxemos essa lógica para o mundo real e "invadimos" canteiros de obras paralisados com anúncios de OOH sagazes, mostrando que quando o assunto é construir, o Clash of Clans entende melhor que ninguém, gerando visibilidade de maneira criativa e contextualizada.',
@@ -278,7 +314,7 @@ export const PROJECTS: Project[] = [
     textColor: 'light',
     bgColor: '#18181b',
     cardType: 'playoffs-2k23',
-    coverImage: '/covers/05_Capa_Nike.png',
+    coverImage: '/covers/05_Capa_Nike.jpg',
     summary: 'A estética 8-bit como válvula de escape e respiro nostálgico para torcedores e jogadores da NBA.',
     summaryEn: '8-bit retro aesthetics as a creative escape and nostalgic immersion for NBA fans and gamers.',
     description: 'DIFERENCIAÇÃO E IDENTIFICAÇÃO\nEm um mundo repleto de designs visuais modernos e complexos, o estilo 8-bit destaca-se como uma escolha ideal para servir como válvula de escape e respiro — muito parecido com o que o basquete representa para quem quer apenas chegar em casa e assistir ao seu time favorito jogar. O uso predominante da estética 8-bit neste projeto traz leveza aos visuais criados, ajudando a destacar a campanha, capturar a atenção do público e transmitir a mensagem de forma diferenciada.\n\nNOSTALGIA E IMERSÃO NA TECNOLOGIA ATUAL\nA estética 8-bit e o pixel art remetem às origens dos videogames, despertando uma forte sensação de nostalgia nos fãs da NBA que cresceram jogando games retrô. Além disso, esse sentimento conecta-se diretamente ao momento atual, no qual jogos como o NBA 2K conectam o espectador ao universo da NBA, jogando ao lado de seus atletas e franquias favoritas. Isso cria uma conexão emocional imediata com o público, tornando a experiência inesquecível.',
@@ -301,55 +337,55 @@ export const PROJECTS: Project[] = [
         alt: 'Basketball court in retro aesthetic'
       },
       {
-        url: '/projects/05 - Nike/02_Nike.png',
+        url: '/projects/05 - Nike/02_Nike.jpg',
         caption: '02 / 10 — Design de personagens em pixel art com uniformes e sneakers históricos da Nike',
         captionEn: '02 / 10 — Pixel art character design featuring historic Nike uniforms and sneakers',
         alt: 'Pixel basketball sneakers and gear'
       },
       {
-        url: '/projects/05 - Nike/03_Nike.png',
+        url: '/projects/05 - Nike/03_Nike.jpg',
         caption: '03 / 10 — Grid tipográfico modular com fontes monoespaçadas e números estilo placar digital',
         captionEn: '03 / 10 — Modular typographic grid with monospaced scoreboard typography',
         alt: 'Scoreboard digital typography grid'
       },
       {
-        url: '/projects/05 - Nike/04_Nike.png',
+        url: '/projects/05 - Nike/04_Nike.jpg',
         caption: '04 / 10 — Telas de loading e transições cinemáticas para transmissões ao vivo',
         captionEn: '04 / 10 — Loading screens and cinematic transitions for live stream broadcasts',
         alt: 'Broadcast graphics screen'
       },
       {
-        url: '/projects/05 - Nike/05_Nike.png',
+        url: '/projects/05 - Nike/05_Nike.jpg',
         caption: '05 / 10 — Cartuchos e manual de instruções vintage reinventados como peças de colecionador',
         captionEn: '05 / 10 — Vintage cartridges and instruction manual reimagined as collectible merchandise',
         alt: 'Retro gaming collectible packaging'
       },
       {
-        url: '/projects/05 - Nike/06_Nike.png',
+        url: '/projects/05 - Nike/06_Nike.jpg',
         caption: '06 / 10 — Visual identity showcase: O encontro da tecnologia moderna com a nostalgia retrô',
         captionEn: '06 / 10 — Visual identity showcase: Modern sports tech meeting retro 8-bit nostalgia',
         alt: 'Visual identity system overview'
       },
       {
-        url: '/projects/05 - Nike/07_Nike.png',
+        url: '/projects/05 - Nike/07_Nike.jpg',
         caption: '07 / 10 — Sprites animados e sequências de movimento em 8-bit para jogabilidade',
         captionEn: '07 / 10 — Animated sprites and movement sequences rendered in pixel art aesthetic',
         alt: 'Pixel art animation frames'
       },
       {
-        url: '/projects/05 - Nike/08_Nike.png',
+        url: '/projects/05 - Nike/08_Nike.jpg',
         caption: '08 / 10 — Paleta de cores sistemática derivada da identidade visual Nike',
         captionEn: '08 / 10 — Systematic color palette derived from Nike heritage and basketball culture',
         alt: 'Color palette specifications'
       },
       {
-        url: '/projects/05 - Nike/09_Nike.png',
+        url: '/projects/05 - Nike/09_Nike.jpg',
         caption: '09 / 10 — Telas de menu e interface em retro pixel design para experiência imersiva',
         captionEn: '09 / 10 — Menu screens and UI elements rendered in immersive pixel design language',
         alt: 'Game menu interface design'
       },
       {
-        url: '/projects/05 - Nike/10_Nike.png',
+        url: '/projects/05 - Nike/10_Nike.jpg',
         caption: '10 / 10 — Integração completa do universo 8-bit no ecosistema de experiência Nike',
         captionEn: '10 / 10 — Complete 8-bit universe integration across the full Nike experience ecosystem',
         alt: 'Full ecosystem integration overview'
@@ -375,7 +411,7 @@ export const PROJECTS: Project[] = [
     textColor: 'light',
     bgColor: '#047857',
     cardType: 'open-up',
-    coverImage: '/covers/06_Capa_Tuborg.gif',
+    coverImage: '/covers/06_Capa_Tuborg.webp',
     summary: 'Campanha integrada para Tuborg incentivando abertura social, música e autenticidade.',
     summaryEn: 'Integrated campaign for Tuborg encouraging open-mindedness, music, and authentic connection.',
     description: 'Campanha desenvolvida para a Tuborg no concurso D&AD New Blood 2026. A iniciativa desafia padrões sociais rígidos e incentiva o público jovem a se abrir para novos encontros, conversas espontâneas e manifestações autênticas de individualidade. Integrando experiências urbanas, ativações digitais e o emblemático anel de abertura da garrafa Tuborg, "Open Up" transforma cada brinde em um convite de desinibição e celebração coletiva.',
@@ -405,25 +441,25 @@ export const PROJECTS: Project[] = [
         alt: 'Music festival crowd and lights'
       },
       {
-        url: '/projects/06 - Tuborg/03_Tuborg.png',
+        url: '/projects/06 - Tuborg/03_Tuborg.jpg',
         caption: '03 / 06 — Instalações interativas de áudio e som nas principais praças europeias',
         captionEn: '03 / 06 — Interactive audio sound installations across European cultural plazas',
         alt: 'Audio reactive spatial installation'
       },
       {
-        url: '/projects/06 - Tuborg/04_Tuborg.png',
+        url: '/projects/06 - Tuborg/04_Tuborg.jpg',
         caption: '04 / 06 — Peças impressas e digitais com tipografia cinética de alta rotação',
         captionEn: '04 / 06 — Print and digital poster assets with kinetic high-energy typography',
         alt: 'Kinetic typography poster design'
       },
       {
-        url: '/projects/06 - Tuborg/05_Tuborg.png',
+        url: '/projects/06 - Tuborg/05_Tuborg.jpg',
         caption: '05 / 06 — Conexões reais: Jovens compartilhando histórias e quebrando o gelo',
         captionEn: '05 / 06 — Real connections: Young people breaking the ice and sharing stories',
         alt: 'Friends celebrating in festival'
       },
       {
-        url: '/projects/06 - Tuborg/06_Tuborg.png',
+        url: '/projects/06 - Tuborg/06_Tuborg.jpg',
         caption: '06 / 06 — Prancha executiva do projeto com case study para o D&AD New Blood 2026',
         captionEn: '06 / 06 — Project case study presentation for D&AD New Blood 2026',
         alt: 'Case study presentation board'
@@ -449,7 +485,7 @@ export const PROJECTS: Project[] = [
     textColor: 'light',
     bgColor: '#1d4ed8',
     cardType: 'volte-a-ser-crianca',
-    coverImage: '/covers/07_Capa_Sucrilhos.png',
+    coverImage: '/covers/07_Capa_Sucrilhos.jpg',
     summary: 'Campanha para Sucrilhos sob o mote "Adultos que continuaram com o hábito de consumir o cereal".',
     summaryEn: 'Campaign for Frosted Flakes under the theme "Adults who continued the habit of eating cereal".',
     description: 'Campanha para Sucrilhos sob o mote "Adultos que continuaram com o hábito de consumir o cereal". Desenvolvida na Miami Ad School, a série de peças impressas retrata com sensibilidade e bom humor os momentos em que a tigela de cereal matinal devolve aos adultos a curiosidade despretensiosa, o entusiasmo vibrante e o vigor da infância em meio às responsabilidades da vida moderna.',
@@ -508,7 +544,7 @@ export const PROJECTS: Project[] = [
     textColor: 'light',
     bgColor: '#b45309',
     cardType: 'casa-santa',
-    coverImage: '/covers/09_Capa_CasaSanta.gif',
+    coverImage: '/covers/09_Capa_CasaSanta.webp',
     summary: 'Identidade de marca e posicionamento para o centro cultural e botânico de Santa Teresa.',
     summaryEn: "Brand identity and positioning for Santa Teresa's cultural and botanical center.",
     description: 'A Casa Santa será o local de referência cultural do bairro de Santa Teresa, no Rio de Janeiro. Desde artes plásticas até quintal botânico, seu maior objetivo é trazer a essência carioca através de três pilares fundamentais:\n\n• DESCONTRAÇÃO: Coluna vertebral do projeto. O visitante sente-se em sua própria casa convivendo com as artes, transitando pelas salas e consumindo cultura com a naturalidade de quem bebe um copo d\'água na cozinha.\n• DESMISTIFICAR: Afastar a ideia de que cultura é tradicional, chata e quadrada. Mostrar que a arte pulsa em qualquer lugar — das telas aos postes — ensinando com oficinas ou conversas descontraídas acompanhadas de um bom chopp.\n• DIVERTIR: Trazer de volta a diversão para a arte. Afinal, quem nunca ouviu da avó no auge da infância: "tá fazendo arte, menino?"',
@@ -525,13 +561,13 @@ export const PROJECTS: Project[] = [
     ],
     images: [
       {
-        url: '/projects/09 - Casa Santa/01_CasaSanta.gif',
+        url: '/projects/09 - Casa Santa/01_CasaSanta.webp',
         caption: '01 / 22 — Casa Santa: Paisagem e atmosfera boêmia de Santa Teresa, Rio de Janeiro',
         captionEn: '01 / 22 — Casa Santa: Bohemian landscape and atmosphere of Santa Teresa, Rio de Janeiro',
         alt: 'Santa Teresa neighborhood view'
       },
       {
-        url: '/projects/09 - Casa Santa/02_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/02_CasaSanta.jpg',
         caption: '02 / 22 — Brandbook com paleta em terracota, amarelo colonial e verde botânico',
         captionEn: '02 / 22 — Brandbook featuring terracotta, colonial yellow, and botanical green tones',
         alt: 'Brand identity book layout'
@@ -579,13 +615,13 @@ export const PROJECTS: Project[] = [
         alt: 'Botanical design elements'
       },
       {
-        url: '/projects/09 - Casa Santa/10_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/10_CasaSanta.jpg',
         caption: '10 / 22 — Fotografia do espaço físico e ambientação do centro cultural',
         captionEn: '10 / 22 — Photography of the cultural center physical space and ambiance',
         alt: 'Cultural space photography'
       },
       {
-        url: '/projects/09 - Casa Santa/11_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/11_CasaSanta.jpg',
         caption: '11 / 22 — Aplicação de marca em elementos de sinalização e wayfinding',
         captionEn: '11 / 22 — Brand application in signage and wayfinding elements',
         alt: 'Wayfinding signage design'
@@ -597,61 +633,61 @@ export const PROJECTS: Project[] = [
         alt: 'Workshop communication material'
       },
       {
-        url: '/projects/09 - Casa Santa/13_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/13_CasaSanta.jpg',
         caption: '13 / 22 — Detalhes das peças gráficas impressas e finalizações',
         captionEn: '13 / 22 — Details of printed graphic pieces and finishing touches',
         alt: 'Print material details'
       },
       {
-        url: '/projects/09 - Casa Santa/14_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/14_CasaSanta.jpg',
         caption: '14 / 22 — Presença visual em redes sociais e plataformas digitais',
         captionEn: '14 / 22 — Visual presence on social media and digital platforms',
         alt: 'Digital social media assets'
       },
       {
-        url: '/projects/09 - Casa Santa/15_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/15_CasaSanta.jpg',
         caption: '15 / 22 — Paleta cromática da identidade em diferentes aplicações',
         captionEn: '15 / 22 — Color palette of identity across different applications',
         alt: 'Color palette applications'
       },
       {
-        url: '/projects/09 - Casa Santa/16_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/16_CasaSanta.jpg',
         caption: '16 / 22 — Imagem institucional e apresentação de marca',
         captionEn: '16 / 22 — Institutional image and brand presentation',
         alt: 'Brand presentation image'
       },
       {
-        url: '/projects/09 - Casa Santa/17_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/17_CasaSanta.jpg',
         caption: '17 / 22 — Documentação visual do projeto de design e direção de arte',
         captionEn: '17 / 22 — Visual documentation of design and art direction project',
         alt: 'Project documentation'
       },
       {
-        url: '/projects/09 - Casa Santa/18_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/18_CasaSanta.jpg',
         caption: '18 / 22 — Composição visual de elementos etnográficos e históricos',
         captionEn: '18 / 22 — Visual composition of ethnographic and historical elements',
         alt: 'Historical visual composition'
       },
       {
-        url: '/projects/09 - Casa Santa/19_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/19_CasaSanta.jpg',
         caption: '19 / 22 — Tipografia e hierarquia visual do projeto de identidade',
         captionEn: '19 / 22 — Typography and visual hierarchy of identity project',
         alt: 'Typography hierarchy'
       },
       {
-        url: '/projects/09 - Casa Santa/20_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/20_CasaSanta.jpg',
         caption: '20 / 22 — Contexto e ambiente de inserção da marca no espaço',
         captionEn: '20 / 22 — Brand context and insertion in physical space environment',
         alt: 'Spatial brand context'
       },
       {
-        url: '/projects/09 - Casa Santa/21_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/21_CasaSanta.jpg',
         caption: '21 / 22 — Visualização de peças promocionais e de comunicação',
         captionEn: '21 / 22 — Visualization of promotional and communication pieces',
         alt: 'Promotional materials display'
       },
       {
-        url: '/projects/09 - Casa Santa/22_CasaSanta.png',
+        url: '/projects/09 - Casa Santa/22_CasaSanta.jpg',
         caption: '22 / 22 — Síntese do projeto completo de identidade para Casa Santa',
         captionEn: '22 / 22 — Complete identity project synthesis for Casa Santa',
         alt: 'Complete project overview'
@@ -816,7 +852,7 @@ export const PROJECTS: Project[] = [
     textColor: 'light',
     bgColor: '#2e1065',
     cardType: 'autoria-feminina',
-    coverImage: '/covers/12_Capa_AutoriaFeminina.png',
+    coverImage: '/covers/12_Capa_AutoriaFeminina.jpg',
     summary: 'O Direito brasileiro foi construído por mulheres: Transformando conquistas jurídicas em agradecimento público.',
     summaryEn: 'Brazilian law was shaped by women: Turning historic legal victories into public gratitude.',
     description: 'O Direito brasileiro foi escrito, por muito tempo, sem mulheres — e contra elas. Direitos básicos como trabalhar, votar, constituir família ou viver sem violência não existiam na lei. Eles precisaram ser criados, disputados e institucionalizados.\n\nNo Brasil, mulheres transformaram vivências em dispositivos jurídicos concretos: estatutos, leis e direitos que hoje sustentam a vida de milhões, mas, ainda assim, esses feitos não são de comum conhecimento a boa parte da população.\n\nAssim, o Damásio resolveu transformar essas conquistas jurídicas em mensagens públicas de agradecimento às mulheres que as conquistaram, trazendo visibilidade a elas e levando os fatos ao público.\n\nA ideia é explicitar o quanto do Direito brasileiro tem autoria feminina e que cada construção e avanço nas leis foram resultado de mulheres dentro do sistema jurídico e político.',

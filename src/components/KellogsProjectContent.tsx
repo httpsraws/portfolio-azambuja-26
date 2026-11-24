@@ -7,12 +7,12 @@ interface KellogsProjectContentProps {
 
 const media = [
   {
-    src: '/projects/kellogs-figma/media-01-light.png',
+    src: '/projects/kellogs-figma/media-01-light.jpg',
     alt: 'Criança assistindo à televisão durante a campanha Volte a Ser Criança',
     altEn: 'Child watching television in the Volte a Ser Criança campaign',
   },
   {
-    src: '/projects/kellogs-figma/media-02-light.png',
+    src: '/projects/kellogs-figma/media-02-light.jpg',
     alt: 'Criança em uma chamada de vídeo durante a campanha Volte a Ser Criança',
     altEn: 'Child on a video call in the Volte a Ser Criança campaign',
   },
@@ -25,13 +25,13 @@ export const KellogsProjectContent: React.FC<KellogsProjectContentProps> = ({ la
     <article className="w-full overflow-hidden bg-white text-[#0d0d0d] dark:bg-[#0d0d0d] dark:text-white">
       <figure className="aspect-[16/9] w-full overflow-hidden bg-neutral-200 dark:bg-neutral-900">
         <img
-          src="/projects/kellogs-figma/hero-light.png"
+          src="/projects/kellogs-figma/hero-light.jpg"
           alt={isPortuguese ? 'Criança tomando Sucrilhos, campanha Volte a Ser Criança' : 'Child eating Sucrilhos, Volte a Ser Criança campaign'}
           fetchPriority="high"
           className="h-full w-full object-cover dark:hidden"
         />
         <img
-          src="/projects/kellogs-figma/hero-dark.png"
+          src="/projects/kellogs-figma/hero-dark.jpg"
           alt=""
           aria-hidden="true"
           className="hidden h-full w-full object-cover dark:block"
@@ -76,7 +76,7 @@ export const KellogsProjectContent: React.FC<KellogsProjectContentProps> = ({ la
             className="h-full w-full object-cover dark:hidden"
           />
           <img
-            src={`/projects/kellogs-figma/media-0${index + 1}-dark.png`}
+            src={`/projects/kellogs-figma/media-0${index + 1}-dark.jpg`}
             alt=""
             aria-hidden="true"
             loading="lazy"

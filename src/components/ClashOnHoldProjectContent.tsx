@@ -8,11 +8,11 @@ interface ClashOnHoldProjectContentProps {
 const mediaPath = '/projects/clash-on-hold-figma';
 
 const campaignBoards = [
-  ['09-03-builders-busy.png', '03 — Builders Busy', '03 — Construtores ocupados'],
-  ['10-02-some-constructions.png', '02 — Some Constructions', '02 — Algumas obras'],
-  ['11-04-loading.png', '04 — Loading', '04 — Em construção'],
-  ['12-05-episodes.png', '05 — 32 Episodes', '05 — 32 episódios'],
-  ['13-01-builder-book.png', '01 — Builder Book', '01 — Manual do construtor'],
+  ['09-03-builders-busy.jpg', '03 — Builders Busy', '03 — Construtores ocupados'],
+  ['10-02-some-constructions.jpg', '02 — Some Constructions', '02 — Algumas obras'],
+  ['11-04-loading.jpg', '04 — Loading', '04 — Em construção'],
+  ['12-05-episodes.jpg', '05 — 32 Episodes', '05 — 32 episódios'],
+  ['13-01-builder-book.jpg', '01 — Builder Book', '01 — Manual do construtor'],
 ] as const;
 
 const campaignMedia = [

@@ -19,7 +19,7 @@ export type CaseMedia =
 
 export type CaseBlock =
   | { kind: 'media'; media: CaseMedia }
-  | { kind: 'statement'; text: Copy; align?: 'left' | 'center' }
+  | { kind: 'statement'; text: Copy; align?: 'left' | 'center'; spacing?: 'spacious' }
   | { kind: 'gallery'; layout: 'stack' | 'padded' | 'grid2' | 'grid3' | 'flush2'; items: CaseMedia[] };
 
 export interface CaseStudy {
@@ -39,8 +39,19 @@ const img = (src: string, pt: string, en: string, extra: Partial<Extract<CaseMed
   ...extra,
 });
 
+const video = (src: string, pt: string, en: string): CaseMedia => ({
+  type: 'video',
+  src,
+  alt: { pt, en },
+});
+
 const range = (from: number, to: number) => Array.from({ length: to - from + 1 }, (_, i) => from + i);
 const pad = (n: number) => String(n).padStart(2, '0');
+
+const RIR = '/projects/13 - Bacio Rock in Rio';
+
+/** Casa Santa pieces kept as PNG (already smaller than JPG); the rest are JPG. */
+const CASA_SANTA_PNG = new Set([3, 4, 5, 6, 7, 8, 9, 12]);
 
 export const CASE_STUDIES: Record<string, CaseStudy> = {
   /* 05 — Aprender Sem Fritar */
@@ -110,9 +121,103 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
   },
 
+  /* Picolé Oficial — Bacio di Latte × Rock in Rio */
+  'picole-oficial-rock-in-rio': {
+    hero: img(`${RIR}/01_BacioRockInRio.jpg`, 'Key visual Picolé Oficial: roqueira com guitarra segurando um picolé Bacio di Latte', 'Picolé Oficial key visual: rocker with a guitar holding a Bacio di Latte popsicle', { ratio: '16 / 9', bg: '#c8811f' }),
+    headline: {
+      pt: 'Dois clássicos.\nO mesmo palco.',
+      en: 'Two classics.\nOne stage.',
+    },
+    insight: {
+      pt: ['Todo Rock in Rio tem seus clássicos: o riff que o público inteiro canta junto, a pulseira no braço, o ingresso guardado de lembrança. São esses detalhes que transformam cada edição em memória.'],
+      en: ['Every Rock in Rio has its classics: the riff the whole crowd sings along to, the wristband on your arm, the ticket kept as a souvenir. Those details are what turn each edition into a memory.'],
+    },
+    idea: {
+      pt: ['Apresentar a Bacio di Latte como picolé oficial do Rock in Rio Brasil 2026 tratando o picolé como mais um desses clássicos, unindo a elegância do gelato italiano à atitude do festival.'],
+      en: ["Introduce Bacio di Latte as the official popsicle of Rock in Rio Brasil 2026 by treating it as one more of those classics, pairing the elegance of Italian gelato with the festival's attitude."],
+    },
+    blocks: [
+      { kind: 'media', media: img(`${RIR}/02_BacioRockInRio.jpg`, 'Três cartazes da campanha: “Toda edição tem seu clássico”, “Picolé Oficial” e “Dois clássicos. O mesmo palco.”', 'Three campaign posters: “Every edition has its classic”, “Picolé Oficial” and “Two classics. One stage.”') },
+      {
+        kind: 'statement',
+        align: 'center',
+        text: {
+          pt: 'Toda edição tem seu clássico.',
+          en: 'Every edition has its classic.',
+        },
+      },
+      { kind: 'media', media: img(`${RIR}/03_BacioRockInRio.jpg`, 'Grid do sistema visual da campanha, com fotografia, tipografia e ilustrações', 'Campaign visual system grid with photography, typography and illustrations') },
+      {
+        kind: 'gallery',
+        layout: 'padded',
+        items: [video(`${RIR}/Take01.mp4`, 'Vídeo Take 01 da campanha Bacio di Latte × Rock in Rio', 'Take 01 video from the Bacio di Latte × Rock in Rio campaign')],
+      },
+      {
+        kind: 'media',
+        media: video(`${RIR}/Take02.mp4`, 'Vídeo Take 02 da campanha Bacio di Latte × Rock in Rio', 'Take 02 video from the Bacio di Latte × Rock in Rio campaign'),
+      },
+      {
+        kind: 'statement',
+        spacing: 'spacious',
+        text: {
+          pt: 'Da estação de trem ao telão do festival, o picolé ganha as ruas antes de subir ao palco.',
+          en: 'From the train platform to the festival screen, the popsicle hits the streets before it takes the stage.',
+        },
+      },
+      { kind: 'media', media: img(`${RIR}/06_BacioRockInRio.jpg`, 'Cartaz Picolé Oficial em uma estação de trem', 'Picolé Oficial poster at a train station') },
+      {
+        kind: 'media',
+        media: video(`${RIR}/Take04.mp4`, 'Vídeo Take 04 da campanha Bacio di Latte × Rock in Rio', 'Take 04 video from the Bacio di Latte × Rock in Rio campaign'),
+      },
+      {
+        kind: 'gallery',
+        layout: 'flush2',
+        items: [
+          img(`${RIR}/07_BacioRockInRio.jpg`, 'Painel de LED com o key visual ao entardecer', 'LED billboard with the key visual at dusk'),
+          img(`${RIR}/08_BacioRockInRio.jpg`, 'Painel com o key visual acima de uma escada rolante do metrô', 'Key visual panel above a subway escalator'),
+        ],
+      },
+      {
+        kind: 'media',
+        media: video(`${RIR}/Take05.mp4`, 'Vídeo Take 05 da campanha Bacio di Latte × Rock in Rio', 'Take 05 video from the Bacio di Latte × Rock in Rio campaign'),
+      },
+      {
+        kind: 'statement',
+        align: 'center',
+        spacing: 'spacious',
+        text: {
+          pt: 'Nas redes, cada sabor entra em cena com o selo de picolé oficial.',
+          en: 'On social, every flavor takes the stage with the official popsicle seal.',
+        },
+      },
+      {
+        kind: 'gallery',
+        layout: 'grid2',
+        items: [
+          img(`${RIR}/10_BacioRockInRio.jpg`, 'Key visual Picolé Oficial Rock in Rio Brasil 2026', 'Picolé Oficial Rock in Rio Brasil 2026 key visual'),
+          img(`${RIR}/11_BacioRockInRio.jpg`, 'Mão tatuada segurando o picolé com ingresso e pulseira do festival', 'Tattooed hand holding the popsicle with a festival ticket and wristband'),
+          img(`${RIR}/12_BacioRockInRio.jpg`, 'Três picolés Bacio di Latte erguidos contra o céu', 'Three Bacio di Latte popsicles raised against the sky'),
+          img(`${RIR}/13_BacioRockInRio.jpg`, 'Dois amigos sorrindo com picolés de doce de leite e chocolate', 'Two friends smiling with dulce de leche and chocolate popsicles'),
+        ],
+      },
+      {
+        kind: 'gallery',
+        layout: 'flush2',
+        items: [
+          img(`${RIR}/04_BacioRockInRio.jpg`, 'Embalagem do Picolé Oficial com selo Rock in Rio', 'Picolé Oficial packaging with the Rock in Rio seal'),
+          img(`${RIR}/05_BacioRockInRio.jpg`, 'Caixa ilustrada do picolé com cenas de show', 'Illustrated popsicle box with concert scenes'),
+        ],
+      },
+      {
+        kind: 'media',
+        media: video(`${RIR}/Take06.mp4`, 'Vídeo Take 06 da campanha Bacio di Latte × Rock in Rio', 'Take 06 video from the Bacio di Latte × Rock in Rio campaign'),
+      },
+    ],
+  },
+
   /* 07 — Cartela Brahmiada */
   'cartela-brahmiada': {
-    hero: img('/covers/02_Capa_Alife.gif', 'Cartela Brahmiada, campanha da Copa do Mundo 2026', 'Cartela Brahmiada, 2026 World Cup campaign', { ratio: '16 / 9' }),
+    hero: img('/covers/02_Capa_Alife.webp', 'Cartela Brahmiada, campanha da Copa do Mundo 2026', 'Cartela Brahmiada, 2026 World Cup campaign', { ratio: '16 / 9' }),
     headline: {
       pt: 'A Copa do Mundo,\nvista da mesa do bar.',
       en: 'The World Cup,\nseen from the bar table.',
@@ -167,7 +272,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       en: ['Use 8-bit and pixel art as the campaign language: lightness that stands out, nostalgia that connects, and an immediate, memorable experience for fans and gamers.'],
     },
     blocks: [
-      { kind: 'media', media: img('/projects/05 - Nike/02_Nike.png', 'Peça 02 da campanha playOffs 2K23', 'playOffs 2K23 piece 02') },
+      { kind: 'media', media: img('/projects/05 - Nike/02_Nike.jpg', 'Peça 02 da campanha playOffs 2K23', 'playOffs 2K23 piece 02') },
       {
         kind: 'statement',
         text: {
@@ -178,19 +283,19 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         kind: 'gallery',
         layout: 'grid3',
-        items: range(3, 5).map((n) => img(`/projects/05 - Nike/${pad(n)}_Nike.png`, `Peça ${pad(n)} da campanha playOffs 2K23`, `playOffs 2K23 piece ${pad(n)}`)),
+        items: range(3, 5).map((n) => img(`/projects/05 - Nike/${pad(n)}_Nike.jpg`, `Peça ${pad(n)} da campanha playOffs 2K23`, `playOffs 2K23 piece ${pad(n)}`)),
       },
       {
         kind: 'gallery',
         layout: 'stack',
-        items: range(6, 10).map((n) => img(`/projects/05 - Nike/${pad(n)}_Nike.png`, `Peça ${pad(n)} da campanha playOffs 2K23`, `playOffs 2K23 piece ${pad(n)}`)),
+        items: range(6, 10).map((n) => img(`/projects/05 - Nike/${pad(n)}_Nike.jpg`, `Peça ${pad(n)} da campanha playOffs 2K23`, `playOffs 2K23 piece ${pad(n)}`)),
       },
     ],
   },
 
   /* 09 — Casa Santa */
   'casa-santa': {
-    hero: img('/projects/09 - Casa Santa/01_CasaSanta.gif', 'Identidade animada da Casa Santa', 'Casa Santa animated identity'),
+    hero: img('/projects/09 - Casa Santa/01_CasaSanta.webp', 'Identidade animada da Casa Santa', 'Casa Santa animated identity'),
     headline: {
       pt: '“Tá fazendo arte, menino?”',
       en: '“Are you making art, kid?”',
@@ -205,7 +310,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     },
     columns: [1, 1.15],
     blocks: [
-      { kind: 'media', media: img('/projects/09 - Casa Santa/02_CasaSanta.png', 'Apresentação da marca Casa Santa', 'Casa Santa brand presentation') },
+      { kind: 'media', media: img('/projects/09 - Casa Santa/02_CasaSanta.jpg', 'Apresentação da marca Casa Santa', 'Casa Santa brand presentation') },
       {
         kind: 'statement',
         text: {
@@ -216,7 +321,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         kind: 'gallery',
         layout: 'padded',
-        items: range(3, 22).map((n) => img(`/projects/09 - Casa Santa/${pad(n)}_CasaSanta.png`, `Casa Santa — peça ${pad(n)}`, `Casa Santa — piece ${pad(n)}`)),
+        items: range(3, 22).map((n) => img(`/projects/09 - Casa Santa/${pad(n)}_CasaSanta.${CASA_SANTA_PNG.has(n) ? 'png' : 'jpg'}`, `Casa Santa — peça ${pad(n)}`, `Casa Santa — piece ${pad(n)}`)),
       },
     ],
   },

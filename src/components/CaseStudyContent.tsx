@@ -72,7 +72,7 @@ const Block: React.FC<{ block: CaseBlock; isPt: boolean }> = ({ block, isPt }) =
   if (block.kind === 'statement') {
     const centered = block.align === 'center';
     return (
-      <section className={`px-5 py-10 sm:px-8 sm:py-12 lg:p-16 ${centered ? 'flex justify-center' : ''}`}>
+      <section className={`px-5 ${block.spacing === 'spacious' ? 'py-16 sm:px-8 sm:py-20 lg:p-24' : 'py-10 sm:px-8 sm:py-12 lg:p-16'} ${centered ? 'flex justify-center' : ''}`}>
         <p
           className={`text-[clamp(1.5rem,2.78vw,2.5rem)] leading-[1.2] tracking-[-0.025em] ${
             centered ? 'max-w-[1137px] text-center' : ''
