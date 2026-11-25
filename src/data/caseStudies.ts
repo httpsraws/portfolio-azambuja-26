@@ -20,7 +20,11 @@ export type CaseMedia =
 export type CaseBlock =
   | { kind: 'media'; media: CaseMedia }
   | { kind: 'statement'; text: Copy; align?: 'left' | 'center'; spacing?: 'spacious' }
-  | { kind: 'gallery'; layout: 'stack' | 'padded' | 'grid2' | 'grid3' | 'flush2'; items: CaseMedia[] };
+  /** Chapter opener: eyebrow + gradient title + body on a dark band */
+  | { kind: 'chapter'; eyebrow: Copy; title: Copy; text: Copy; gradient: [string, string] }
+  | { kind: 'gallery'; layout: 'stack' | 'padded' | 'grid2' | 'grid3' | 'flush2' | 'compare'; items: CaseMedia[]; /** Constrain grid width (e.g. pairs of vertical stories) */ narrow?: boolean }
+  /** Email marketing sequences: each inner array is one email (header → body → footer) stacked seamlessly */
+  | { kind: 'emails'; emails: CaseMedia[][] };
 
 export interface CaseStudy {
   hero: CaseMedia;
@@ -49,6 +53,30 @@ const range = (from: number, to: number) => Array.from({ length: to - from + 1 }
 const pad = (n: number) => String(n).padStart(2, '0');
 
 const RIR = '/projects/13 - Bacio Rock in Rio';
+const EST = '/projects/14 - Estacio Academias';
+/** Estácio email footers kept as PNG (flat logos, tiny files); headers and bodies are JPG. */
+const EST_PNG = new Set([13, 16, 19, 22, 25, 28, 31, 34, 41]);
+
+/**
+ * Digital media kit exported from Figma for one academy:
+ * h = 1200×668 banners, s = 1200×1200 posts, p = 960×1200 posts, v = 1080×1920 stories.
+ */
+const estacioMediaKit = (prefix: 'ama' | 'arh' | 'aia', pt: string, en: string): CaseBlock[] => {
+  const piece = (id: string, kindPt: string, kindEn: string) =>
+    img(`${EST}/midia_${prefix}_${id}.jpg`, `${kindPt} da ${pt}`, `${en} ${kindEn}`);
+  const banners = range(1, 5).map((n) => piece(`h${n}`, 'Banner digital', 'digital banner'));
+  const squares = range(1, 5).map((n) => piece(`s${n}`, 'Post quadrado', 'square post'));
+  const portraits = range(1, 3).map((n) => piece(`p${n}`, 'Post vertical', 'portrait post'));
+  const stories = range(1, 2).map((n) => piece(`v${n}`, 'Story', 'story'));
+  return [
+    { kind: 'gallery', layout: 'grid3', items: banners.slice(0, 3) },
+    { kind: 'gallery', layout: 'grid2', items: banners.slice(3) },
+    { kind: 'gallery', layout: 'grid3', items: squares.slice(0, 3) },
+    { kind: 'gallery', layout: 'grid2', items: squares.slice(3) },
+    { kind: 'gallery', layout: 'grid3', items: portraits },
+    { kind: 'gallery', layout: 'grid2', items: stories, narrow: true },
+  ];
+};
 
 /** Casa Santa pieces kept as PNG (already smaller than JPG); the rest are JPG. */
 const CASA_SANTA_PNG = new Set([3, 4, 5, 6, 7, 8, 9, 12]);
@@ -211,6 +239,188 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         kind: 'media',
         media: video(`${RIR}/Take06.mp4`, 'Vídeo Take 06 da campanha Bacio di Latte × Rock in Rio', 'Take 06 video from the Bacio di Latte × Rock in Rio campaign'),
+      },
+    ],
+  },
+
+  /* Estácio Academias — umbrella brand + three academies */
+  'estacio-academias': {
+    hero: img(`${EST}/01_Estacio.gif`, 'Animação do símbolo da Estácio Academias: losango com gradiente cônico metálico', 'Estácio Academias symbol animation: diamond with a metallic conic gradient', { ratio: '16 / 9', bg: '#11141b' }),
+    headline: {
+      pt: 'Uma marca.\nTrês academias.',
+      en: 'One brand.\nThree academies.',
+    },
+    insight: {
+      pt: ['O mercado muda rápido, e quem quer sair na frente precisa de formação prática e atualizada. A Estácio queria reunir seus cursos livres em academias temáticas, cada uma com personalidade própria, sem perder a força de uma única marca.'],
+      en: ['The market moves fast, and anyone who wants to get ahead needs hands-on, up-to-date training. Estácio wanted to bring its professional courses together into themed academies, each with its own personality, without losing the strength of a single brand.'],
+    },
+    idea: {
+      pt: ['Uma marca guarda-chuva construída sobre um único símbolo: um losango com gradiente cônico de aspecto metálico. Ele ganha uma combinação de cores própria em cada academia, assim cada submarca se diferencia e todas continuam parte da mesma família.'],
+      en: ['An umbrella brand built on a single symbol: a diamond with a metallic conic gradient. It takes on its own color pairing in each academy, so every sub-brand stands apart while still belonging to the same family.'],
+    },
+    blocks: [
+      /* Master brand */
+      { kind: 'media', media: img(`${EST}/04_Estacio.png`, 'Logotipo Estácio Escolas & Academias', 'Estácio Escolas & Academias logo') },
+      { kind: 'media', media: img(`${EST}/03_Estacio.png`, 'Atributos da marca: versátil, disruptivo, moderno e profissional', 'Brand attributes: versatile, disruptive, modern and professional') },
+      { kind: 'media', media: img(`${EST}/05_Estacio.png`, 'Os três símbolos das academias, cada um com sua combinação de cores', 'The three academy symbols, each with its own color pairing') },
+      {
+        kind: 'statement',
+        text: {
+          pt: 'O mesmo símbolo, três paletas. Cada academia assume sua cor e mantém a assinatura da marca-mãe.',
+          en: 'One symbol, three palettes. Each academy takes on its own color while keeping the master brand signature.',
+        },
+      },
+      { kind: 'media', media: img(`${EST}/02_Estacio.png`, 'Assinaturas das três submarcas: Marketing Analítico, Inteligência Artificial e Recursos Humanos', 'Lockups of the three sub-brands: Analytical Marketing, Artificial Intelligence and Human Resources') },
+
+      /* Academia de Marketing Analítico */
+      {
+        kind: 'chapter',
+        eyebrow: { pt: 'Academia de', en: 'Academy of' },
+        title: { pt: 'Marketing Analítico', en: 'Analytical Marketing' },
+        gradient: ['#1f2bff', '#4ee8f5'],
+        text: {
+          pt: '79% dos profissionais de marketing dizem ter dificuldade em trabalhar com métricas. A academia nasce para quem quer coletar e interpretar os KPIs que importam, transformar insights em estratégia e medir resultados com precisão.',
+          en: '79% of marketing professionals say they struggle to work with metrics. The academy is built for people who want to collect and read the KPIs that matter, turn insights into strategy and measure results with precision.',
+        },
+      },
+      {
+        kind: 'gallery',
+        layout: 'flush2',
+        items: [
+          img(`${EST}/06_Estacio.jpg`, 'Cartaz da Academia de Marketing Analítico no metrô: 86% dos consumidores estão dispostos a pagar mais por uma experiência superior', 'Analytical Marketing Academy subway poster: 86% of consumers are willing to pay more for a better experience'),
+          img(`${EST}/07_Estacio.jpg`, 'Cartaz da Academia de Marketing Analítico no metrô: 79% dos profissionais de marketing alegam ter desafios em trabalhar com métricas', 'Analytical Marketing Academy subway poster: 79% of marketing professionals struggle to work with metrics'),
+        ],
+      },
+      { kind: 'media', media: img(`${EST}/10_Estacio.jpg`, 'Landing page da Academia de Marketing Analítico em um notebook', 'Analytical Marketing Academy landing page on a laptop') },
+      {
+        kind: 'statement',
+        align: 'center',
+        text: {
+          pt: 'Dados que geram resultados. Nas mídias digitais, a academia apresenta as ferramentas do dia a dia do profissional: GA4, Power BI, Tag Manager e dashboards.',
+          en: 'Data that drives results. Across digital media, the academy showcases the everyday tools of the trade: GA4, Power BI, Tag Manager and dashboards.',
+        },
+      },
+      ...estacioMediaKit('ama', 'Academia de Marketing Analítico', 'Analytical Marketing Academy'),
+      {
+        kind: 'statement',
+        text: {
+          pt: 'Em parceria com a Métricas Boss, são cerca de 120 horas de aulas com especialistas reconhecidos pelo mercado, acesso ilimitado por 18 meses e certificação. A régua de CRM apresenta a academia, mostra o que se aprende e quem ensina, e fecha com a oferta de matrícula.',
+          en: 'In partnership with Métricas Boss, it offers around 120 hours of classes with recognized industry experts, 18 months of unlimited access and certification. The CRM sequence introduces the academy, shows what you learn and who teaches it, and closes with the enrollment offer.',
+        },
+      },
+      {
+        kind: 'emails',
+        emails: [
+          [11, 12, 13],
+          [14, 15, 16],
+          [17, 18, 19],
+          [20, 21, 22],
+        ].map((parts, i) =>
+          parts.map((n) => img(`${EST}/${pad(n)}_Estacio.${EST_PNG.has(n) ? 'png' : 'jpg'}`, `E-mail ${i + 1} da régua da Academia de Marketing Analítico`, `Analytical Marketing Academy email ${i + 1} of the sequence`))
+        ),
+      },
+
+      /* Academia de Recursos Humanos */
+      {
+        kind: 'chapter',
+        eyebrow: { pt: 'Academia de', en: 'Academy of' },
+        title: { pt: 'Recursos Humanos', en: 'Human Resources' },
+        gradient: ['#00b2ff', '#a98bff'],
+        text: {
+          pt: 'O mundo do trabalho está cada vez mais dinâmico e humanizado, e quem souber liderar pessoas e processos sai na frente. Do básico ao avançado, a jornada passa por cultura organizacional, recrutamento com IA, desempenho, diversidade, liderança e saúde mental, com mentoras que somam quase 40 anos em gestão de pessoas.',
+          en: 'The world of work is becoming more dynamic and human, and those who know how to lead people and processes get ahead. From basic to advanced, the journey covers organizational culture, AI-assisted recruiting, performance, diversity, leadership and mental health, guided by mentors with nearly 40 years of combined experience in people management.',
+        },
+      },
+      ...estacioMediaKit('arh', 'Academia de Recursos Humanos', 'Human Resources Academy'),
+      {
+        kind: 'statement',
+        align: 'center',
+        text: {
+          pt: 'Por e-mail, a régua apresenta a academia, a ementa, as mentoras e a oferta para novas matrículas.',
+          en: 'By email, the sequence introduces the academy, the syllabus, the mentors and the offer for new enrollments.',
+        },
+      },
+      {
+        kind: 'emails',
+        emails: [
+          [23, 24, 25],
+          [26, 27, 28],
+          [29, 30, 31],
+          [32, 33, 34],
+        ].map((parts, i) =>
+          parts.map((n) => img(`${EST}/${pad(n)}_Estacio.${EST_PNG.has(n) ? 'png' : 'jpg'}`, `E-mail ${i + 1} da régua da Academia de Recursos Humanos`, `Human Resources Academy email ${i + 1} of the sequence`))
+        ),
+      },
+
+      /* Academia de Inteligência Artificial */
+      {
+        kind: 'chapter',
+        eyebrow: { pt: 'Academia de', en: 'Academy of' },
+        title: { pt: 'Inteligência Artificial', en: 'Artificial Intelligence' },
+        gradient: ['#2a3cff', '#c6f121'],
+        text: {
+          pt: 'Uma jornada de 12 meses para aprender IA do zero ao avançado, com conteúdo atualizado todo mês. Tecnologia, modernidade, disrupção e autoridade guiam uma linguagem feita para quem quer dominar o futuro e impulsionar a carreira.',
+          en: 'A 12-month journey to learn AI from zero to advanced, with content updated every month. Technology, modernity, disruption and authority guide a language made for people who want to master the future and boost their careers.',
+        },
+      },
+      { kind: 'media', media: img(`${EST}/35_Estacio.png`, 'Atributos da Academia de Inteligência Artificial: tecnologia, modernidade, disrupção e autoridade', 'Artificial Intelligence Academy attributes: technology, modernity, disruption and authority') },
+      { kind: 'media', media: img(`${EST}/36_Estacio.png`, 'Iconografia da Academia de Inteligência Artificial sobre fundo verde-limão', 'Artificial Intelligence Academy iconography on a lime green background') },
+      {
+        kind: 'gallery',
+        layout: 'compare',
+        items: [
+          img(`${EST}/09_Estacio.jpg`, 'Landing page da Academia de Inteligência Artificial com a identidade anterior', 'Artificial Intelligence Academy landing page with the previous identity'),
+          img(`${EST}/08_Estacio.jpg`, 'Landing page da Academia de Inteligência Artificial com a nova identidade', 'Artificial Intelligence Academy landing page with the new identity'),
+        ],
+      },
+      {
+        kind: 'statement',
+        align: 'center',
+        text: {
+          pt: 'IA não é o futuro, é o agora. Os anúncios convidam a dominar ChatGPT, DeepSeek, Midjourney e outras ferramentas, do zero ao pro.',
+          en: 'AI is not the future, it is now. The ads invite people to master ChatGPT, DeepSeek, Midjourney and other tools, from zero to pro.',
+        },
+      },
+      ...estacioMediaKit('aia', 'Academia de Inteligência Artificial', 'Artificial Intelligence Academy'),
+      {
+        kind: 'statement',
+        text: {
+          pt: 'A nova identidade também reorganiza peças de evento, como a masterclass gratuita no YouTube: o grafismo da academia substitui a rede de pontos genérica e o verde-limão ganha protagonismo.',
+          en: 'The new identity also reshapes event pieces, such as the free masterclass on YouTube: the academy pattern replaces the generic dot network, and lime green takes center stage.',
+        },
+      },
+      {
+        kind: 'gallery',
+        layout: 'compare',
+        items: [
+          img(`${EST}/43_Estacio.jpg`, 'Post da masterclass de Inteligência Artificial com a identidade anterior', 'Artificial Intelligence masterclass post with the previous identity'),
+          img(`${EST}/42_Estacio.jpg`, 'Post da masterclass de Inteligência Artificial com a nova identidade', 'Artificial Intelligence masterclass post with the new identity'),
+        ],
+      },
+      {
+        kind: 'statement',
+        align: 'center',
+        text: {
+          pt: 'Nas redes, a jornada Especialista em IA convida para três aulas ao vivo, com a linguagem de código da marca.',
+          en: 'On social, the AI Specialist journey invites people to three live classes, using the brand’s code-inspired language.',
+        },
+      },
+      { kind: 'media', media: img(`${EST}/37_Estacio.jpg`, 'Posts da jornada Especialista em IA: informações, convite e datas das aulas', 'AI Specialist journey posts: info, invitation and class dates') },
+      {
+        kind: 'statement',
+        text: {
+          pt: 'Para quem já é aluno, a régua de CRM traz o calendário de lives da turma, com temas que vão da IA na sociedade contemporânea à análise de dados e geração de imagens com ChatGPT.',
+          en: 'For enrolled students, the CRM sequence shares the class live-session calendar, with topics ranging from AI in contemporary society to data analysis and image generation with ChatGPT.',
+        },
+      },
+      {
+        kind: 'emails',
+        emails: [
+          [39, 40, 41],
+          [44, 40, 41],
+        ].map((parts, i) =>
+          parts.map((n) => img(`${EST}/${pad(n)}_Estacio.${EST_PNG.has(n) ? 'png' : 'jpg'}`, `E-mail ${i + 1} da régua da Academia de Inteligência Artificial`, `Artificial Intelligence Academy email ${i + 1} of the sequence`))
+        ),
       },
     ],
   },

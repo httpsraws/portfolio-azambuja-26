@@ -84,6 +84,51 @@ const Block: React.FC<{ block: CaseBlock; isPt: boolean }> = ({ block, isPt }) =
     );
   }
 
+  if (block.kind === 'chapter') {
+    // Sub-brand opener: always on the brand's dark ground so each academy's palette reads true
+    const [from, to] = block.gradient;
+    return (
+      <section className="bg-[#11141b] px-5 py-16 text-white sm:px-8 sm:py-20 lg:p-24">
+        <div className="flex items-center gap-5 sm:gap-7">
+          <span
+            aria-hidden
+            className="size-12 shrink-0 rotate-45 rounded-[22%] sm:size-16 lg:size-20"
+            style={{ background: `conic-gradient(from 45deg, ${from}, ${to}, ${from}, ${to}, ${from})` }}
+          />
+          <h2 className="flex flex-col">
+            <span className="mb-1 text-[11px] font-medium uppercase tracking-[0.5em] text-white/70 sm:text-xs lg:text-sm">
+              {isPt ? block.eyebrow.pt : block.eyebrow.en}
+            </span>
+            <span
+              className="bg-clip-text pb-[0.08em] text-[clamp(2.25rem,6vw,5.5rem)] font-bold uppercase leading-[0.9] tracking-[-0.035em] text-transparent"
+              style={{ backgroundImage: `linear-gradient(90deg, ${to}, ${from})` }}
+            >
+              {isPt ? block.title.pt : block.title.en}
+            </span>
+          </h2>
+        </div>
+        <p className="mt-10 max-w-[1137px] text-[clamp(1.25rem,2.2vw,2rem)] leading-[1.25] tracking-[-0.02em] text-white/85 sm:mt-12 lg:mt-16">
+          {isPt ? block.text.pt : block.text.en}
+        </p>
+      </section>
+    );
+  }
+
+  if (block.kind === 'emails') {
+    // Each email is header → body → footer with a slight gap between pieces; whole sequence side by side
+    return (
+      <section className="flex justify-center px-5 pb-10 sm:px-8 sm:pb-12 lg:px-16 lg:pb-16">
+        <div className={`grid w-full grid-cols-1 items-start gap-8 sm:grid-cols-2 sm:gap-6 lg:gap-5 ${block.emails.length >= 4 ? 'lg:grid-cols-4' : 'lg:max-w-[50%]'}`}>
+          {block.emails.map((parts, i) => (
+            <div key={i} className="flex flex-col gap-1.5 sm:gap-2">
+              {parts.map((part, j) => <Media key={j} media={part} isPt={isPt} />)}
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   // Galleries
   if (block.layout === 'stack') {
     return (
@@ -115,11 +160,25 @@ const Block: React.FC<{ block: CaseBlock; isPt: boolean }> = ({ block, isPt }) =
       </div>
     );
   }
+  if (block.layout === 'compare') {
+    // Before → after, labelled and given room to breathe
+    const labels = isPt ? ['[ANTES]', '[DEPOIS]'] : ['[BEFORE]', '[AFTER]'];
+    return (
+      <section className="grid grid-cols-1 gap-10 px-5 py-10 sm:grid-cols-2 sm:gap-8 sm:px-8 sm:py-12 lg:gap-12 lg:p-16">
+        {block.items.map((item, i) => (
+          <div key={i} className="flex flex-col gap-4">
+            <span className={`text-xs font-bold uppercase tracking-wide ${i === 0 ? 'opacity-50' : ''}`}>{labels[i] ?? ''}</span>
+            <Media media={item} isPt={isPt} inGrid />
+          </div>
+        ))}
+      </section>
+    );
+  }
   const cols = block.layout === 'grid3' ? 'sm:grid-cols-3' : 'sm:grid-cols-2';
   const hasPortraitFilms = block.items.some((item) => item.type === 'embed' && isPortrait(item.ratio));
   return (
     <section className="flex justify-center px-5 pb-10 sm:px-8 sm:pb-12 lg:px-16 lg:pb-16">
-      <div className={`grid w-full grid-cols-1 items-start gap-5 sm:gap-[29px] ${cols} ${hasPortraitFilms ? 'max-w-[1024px]' : ''}`}>
+      <div className={`grid w-full grid-cols-1 items-start gap-5 sm:gap-[29px] ${cols} ${hasPortraitFilms ? 'max-w-[1024px]' : ''} ${block.narrow ? 'max-w-[760px]' : ''}`}>
         {block.items.map((item, i) => <Media key={i} media={item} isPt={isPt} inGrid />)}
       </div>
     </section>

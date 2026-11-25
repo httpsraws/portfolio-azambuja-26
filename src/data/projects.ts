@@ -62,7 +62,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'picole-oficial-rock-in-rio',
-    title: 'Picolé Oficial',
+    title: 'O Picolé Oficial do Rock In Rio',
     subtitle: 'Bacio di Latte × Rock in Rio Brasil 2026',
     subtitleEn: 'Bacio di Latte × Rock in Rio Brasil 2026',
     category: 'Campanha Integrada',
@@ -886,6 +886,35 @@ export const PROJECTS: Project[] = [
         alt: 'Legal scholars in symposium'
       }
     ]
+  },
+  {
+    id: 'estacio-academias',
+    title: 'Estácio Academias',
+    subtitle: 'Marketing Analítico, Recursos Humanos e Inteligência Artificial',
+    subtitleEn: 'Analytical Marketing, Human Resources and Artificial Intelligence',
+    category: 'Branding',
+    categoryEn: 'Branding',
+    year: '2025',
+    client: 'Estácio',
+    artDirection: 'Ricardo Azambuja',
+    scope: 'Branding',
+    scopeEn: 'Branding',
+    accentColor: '#5ee8f0',
+    textColor: 'light',
+    bgColor: '#11141b',
+    cardType: 'estacio-academias',
+    coverImage: '/covers/14_Capa_Estacio.gif',
+    summary: 'Marca guarda-chuva da Estácio para cursos livres, com três submarcas: Marketing Analítico, Recursos Humanos e Inteligência Artificial.',
+    summaryEn: "Estácio's umbrella brand for professional courses, with three sub-brands: Analytical Marketing, Human Resources and Artificial Intelligence.",
+    description: 'Estácio Academias é a marca guarda-chuva da Estácio para formações práticas e atualizadas em áreas de alta demanda do mercado. Sob ela vivem três submarcas: a Academia de Marketing Analítico, a Academia de Recursos Humanos e a Academia de Inteligência Artificial.\n\nO sistema parte de um único símbolo, um losango com gradiente cônico de aspecto metálico, que ganha uma combinação de cores própria em cada academia. Assim, cada submarca tem personalidade, mas todas são reconhecidas como parte da mesma família. A identidade se guia por quatro atributos: versátil, disruptivo, moderno e profissional.\n\nO sistema se desdobra em mídia exterior, landing pages e réguas de e-mail marketing para cada academia.',
+    descriptionEn: "Estácio Academias is Estácio's umbrella brand for hands-on, up-to-date training in high-demand fields. Three sub-brands live under it: the Analytical Marketing Academy, the Human Resources Academy and the Artificial Intelligence Academy.\n\nThe system starts from a single symbol, a diamond with a metallic conic gradient, which takes on its own color pairing in each academy. Each sub-brand gets its own personality, yet all of them read as one family. The identity is guided by four attributes: versatile, disruptive, modern and professional.\n\nThe system unfolds across out-of-home media, landing pages and email marketing sequences for each academy.",
+    tags: ['Branding', 'Identidade Visual', 'Arquitetura de Marca', 'Educação', 'E-mail Marketing'],
+    credits: [
+      { role: 'Cliente', roleEn: 'Client', name: 'Estácio' },
+      { role: 'Direção de Arte', roleEn: 'Art Direction', name: 'Ricardo Azambuja' },
+      { role: 'Ano', roleEn: 'Year', name: '2025' },
+      { role: 'Categoria', roleEn: 'Category', name: 'Branding', nameEn: 'Branding' }
+    ],
   }
 ];
 
