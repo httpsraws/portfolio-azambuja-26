@@ -84,15 +84,16 @@
 
 /* Masonry */
 .mo-grid {
-  columns: 3;
-  column-gap: clamp(12px, 1.6vw, 24px);
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(12px, 1.6vw, 24px);
 }
-@media (max-width: 1024px) { .mo-grid { columns: 2; } }
-@media (max-width: 600px) { .mo-grid { columns: 1; } }
-
-.mo-item {
-  break-inside: avoid;
-  margin-bottom: clamp(24px, 3vw, 44px);
+.mo-col {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.6vw, 24px);
 }
 .mo-media {
   position: relative;

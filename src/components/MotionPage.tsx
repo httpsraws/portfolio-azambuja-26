@@ -56,6 +56,18 @@ const InViewVideo: React.FC<{ src: string; className?: string; onEnded?: () => v
   );
 };
 
+/** 3 columns on desktop, 2 on tablet, 1 on phones (matches the old CSS breakpoints) */
+const useColumnCount = () => {
+  const get = () => (typeof window === 'undefined' ? 3 : window.innerWidth <= 600 ? 1 : window.innerWidth <= 1024 ? 2 : 3);
+  const [count, setCount] = useState(get);
+  useEffect(() => {
+    const onResize = () => setCount(get());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  return count;
+};
+
 export const MotionPage: React.FC<MotionPageProps> = ({ language, onOpenProject }) => {
   const isPt = language === 'pt';
   const t = (pt: string, en: string) => (isPt ? pt : en);
@@ -66,6 +78,22 @@ export const MotionPage: React.FC<MotionPageProps> = ({ language, onOpenProject 
     () => (filter === 'all' ? MOTION_ITEMS : MOTION_ITEMS.filter((item) => item.kind === filter)),
     [filter]
   );
+
+  // Masonry: place each item (in list order) into the currently shortest column,
+  // so the reading order runs across columns and neighbours in the list never stack.
+  const columnCount = useColumnCount();
+  const columns = useMemo(() => {
+    const cols: { item: MotionItem; index: number }[][] = Array.from({ length: columnCount }, () => []);
+    const heights = new Array(columnCount).fill(0);
+    items.forEach((item, index) => {
+      const [w, h] = item.ratio.split('/').map((n) => parseFloat(n));
+      const target = heights.indexOf(Math.min(...heights));
+      cols[target].push({ item, index });
+      heights[target] += (w && h ? h / w : 9 / 16) + 0.08; // + gap
+    });
+    return cols;
+  }, [items, columnCount]);
+
   const counts = useMemo(
     () => ({
       all: MOTION_ITEMS.length,
@@ -124,8 +152,9 @@ export const MotionPage: React.FC<MotionPageProps> = ({ language, onOpenProject 
 
       {/* Pieces */}
       <section className="mo-grid">
-        {items.map((item, i) => {
-          const subtitle = isPt ? item.subtitle : item.subtitleEn || item.subtitle;
+        {columns.map((col, c) => (
+        <div className="mo-col" key={c}>
+        {col.map(({ item, index: i }) => {
           const isFilm = Boolean(item.embed);
           const title = isPt ? item.title : item.titleEn || item.title;
           return (
@@ -157,27 +186,11 @@ export const MotionPage: React.FC<MotionPageProps> = ({ language, onOpenProject 
                 )}
                 {isFilm && <span className="mo-play">{t('Assistir', 'Play')}</span>}
               </div>
-              <div className="mo-caption">
-                <span className="mo-caption__title">{title}</span>
-                <span className="mo-dim">{subtitle ? `${subtitle}, ` : ''}{item.year}</span>
-                {cutsOf(item).length > 1 && (
-                  <span className="mo-cuts">
-                    {cutsOf(item).map((_, cut) => (
-                      <button key={cut} type="button" onClick={() => openItem(item, cut)}>
-                        {String(cut + 1).padStart(2, '0')}
-                      </button>
-                    ))}
-                  </span>
-                )}
-                {item.projectId && (
-                  <button type="button" className="mo-caption__link" onClick={() => onOpenProject(item.projectId as string)}>
-                    {t('Ver projeto', 'View project')} →
-                  </button>
-                )}
-              </div>
             </motion.article>
           );
         })}
+        </div>
+        ))}
       </section>
 
       {/* Player */}
@@ -207,6 +220,7 @@ export const MotionPage: React.FC<MotionPageProps> = ({ language, onOpenProject 
               <iframe
                 src={active.url}
                 title={active.title}
+                referrerPolicy="strict-origin-when-cross-origin"
                 allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
                 allowFullScreen
               />
