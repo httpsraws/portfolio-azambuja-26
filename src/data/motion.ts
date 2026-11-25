@@ -173,15 +173,6 @@ export const MOTION_ITEMS: MotionItem[] = [
     src: '/motion/bacio-copinho.mp4',
   },
   {
-    id: 'gold-rays-01',
-    title: 'Raios dourados — 01',
-    titleEn: 'Golden rays — 01',
-    year: '2026',
-    kind: 'motion',
-    ratio: '4 / 5',
-    src: '/motion/gold-rays-01.mp4',
-  },
-  {
     id: 'clash-builder',
     title: 'Clash On Hold — Builder',
     subtitle: 'Personagem em IA',
@@ -280,15 +271,6 @@ export const MOTION_ITEMS: MotionItem[] = [
     ratio: '16 / 9',
     projectId: 'open-up',
     src: '/projects/tuborg-figma/comp-1.mp4',
-  },
-  {
-    id: 'gold-rays-02',
-    title: 'Raios dourados — 02',
-    titleEn: 'Golden rays — 02',
-    year: '2026',
-    kind: 'motion',
-    ratio: '4 / 5',
-    src: '/motion/gold-rays-02.mp4',
   },
   {
     id: 'clash-invasion',
